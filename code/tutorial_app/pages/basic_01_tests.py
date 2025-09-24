@@ -14,7 +14,8 @@
 # limitations under the License.
 """Tests for auto continuing associated tasks."""
 from typing import Any
-from pathlib import Path
+
+# Removed unused import
 import sys
 
 try:
@@ -37,54 +38,56 @@ DELETE_ME_FILE_NAME = "delete-me.txt"
 
 UBUNTU_PACKAGE = "jq"
 
+
 def check_folder_exists() -> dict[str, Any]:
     """Ensure the folder is created."""
     _ = testing.get_folder(PROJECT_NAME, ROOT_DIR, FOLDER_NAME)
 
 
-
 def check_file_in_folder() -> dict[str, Any]:
     """Check if any file exists in my-first-folder."""
     import os
-    
+
     folder_path = os.path.join(PROJECT_DIR, FOLDER_NAME)
     # Check for any non-hidden file
     for filename in os.listdir(folder_path):
-        if not filename.startswith('.'):
+        if not filename.startswith("."):
             return None  # Found at least one non-hidden file
-            
+
     raise testing.TestFail("info_wait_for_file_upload")
-    
+
     # Don't return anything, just like other test functions
+
 
 def check_file_deleted() -> dict[str, Any]:
     """Check if the file is deleted."""
     import os
-    
+
     folder_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME)
-    
+
     # Check if delete-me.txt still exists
     if os.path.exists(os.path.join(folder_path, DELETE_ME_FILE_NAME)):
         raise testing.TestFail("info_wait_for_delete")
-            
+
     return None
+
 
 def check_file_changed() -> dict[str, Any]:
     """Check if example-file.txt has been modified."""
     import os
-    
+
     file_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME, "example-file.txt")
-    
+
     # Read the file contents
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         content = f.read().strip()
-    
+
     # Check if content is different from original
     if content == "this is an example":
         raise testing.TestFail("info_wait_for_edit")
-            
+
     return None
-    
+
 
 def add_ubuntu_package():
     """Wait for the package to be added."""
@@ -99,12 +102,7 @@ def ensure_gpu_count() -> int:
         - info_wait_for_project
     """
     response = wb_svc_client.get_gpu_request(PROJECT_NAME) or {}
-    gpu_count = (
-        response.get("data", {})
-                .get("project", {})
-                .get("resources", {})
-                .get("gpusRequested")
-    )
+    gpu_count = response.get("data", {}).get("project", {}).get("resources", {}).get("gpusRequested")
 
     if gpu_count is None:
         raise testing.TestFail("info_wait_for_project")

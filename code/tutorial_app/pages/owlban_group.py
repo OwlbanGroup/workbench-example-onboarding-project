@@ -16,7 +16,7 @@
 
 from pathlib import Path
 
-import streamlit as st
+import streamlit as st  # type: ignore
 
 from common import localization, theme
 from pages import owlban_group_tests as TESTS
