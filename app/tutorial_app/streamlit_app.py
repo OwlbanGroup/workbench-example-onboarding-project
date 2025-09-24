@@ -1,4 +1,29 @@
-"""Top level streamlit app page."""
+"""Main Streamlit application entry point for NVIDIA AI Workbench Tutorial.
+
+This module initializes the tutorial application with security measures,
+configures the Streamlit page settings, and sets up navigation for all
+tutorial pages.
+
+The application provides an interactive learning platform for NVIDIA AI Workbench,
+featuring tutorials on project creation, environment management, and advanced
+AI development workflows.
+
+Key Features:
+- Security initialization with audit logging
+- Responsive centered layout
+- Multi-page navigation with progress tracking
+- External link integration (help, documentation, bug reports)
+
+Security:
+- Initializes security measures on startup
+- Logs application start events for audit purposes
+- Applies security headers and input validation
+
+Navigation:
+- Dynamic page list generation from sidebar configuration
+- Progress tracking for tutorial completion
+- External links for support and documentation
+"""
 
 import streamlit as st
 

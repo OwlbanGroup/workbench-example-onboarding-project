@@ -1,3 +1,4 @@
+# Core dependencies
 httpunixsocketconnection==1.0.1
 jupyterlab>3.0
 pydantic-yaml==1.4.0
@@ -6,3 +7,28 @@ streamlit-autorefresh==1.0.1
 streamlit-extras==0.5.5
 streamlit==1.41.1
 requests
+
+# Development dependencies (install with: pip install -r requirements.txt --editable)
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+hypothesis>=6.0.0
+
+# Code quality
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+pylint>=2.17.0
+mypy>=1.0.0
+bandit>=1.7.0
+safety>=2.3.0
+
+# Pre-commit hooks
+pre-commit>=3.0.0
+
+# Type checking
+types-all>=1.0.0
+
+# Documentation
+mkdocs>=1.4.0
+mkdocs-material>=9.0.0

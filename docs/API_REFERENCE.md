@@ -165,34 +165,142 @@ Security utilities and best practices.
 
 ##### Classes
 
+###### `SecurityError(Exception)`
+Custom exception for security violations.
+
+**Attributes:**
+- Standard Exception attributes
+
 ###### `InputSanitizer`
 Input validation and sanitization.
 
 **Methods:**
-- `sanitize_text_input(text, max_length)` -> str: Sanitize text input
-- `validate_file_upload(content, filename)` -> bool: Validate file uploads
-- `sanitize_url(url)` -> str: Sanitize URLs
+- `sanitize_text_input(text, max_length)` -> str: Sanitize text input by removing dangerous content
+- `validate_file_upload(file_content, filename)` -> bool: Validate uploaded file content and filename
+- `sanitize_url(url)` -> str: Sanitize and validate URLs
+
+**Raises:** SecurityError for dangerous patterns or invalid inputs
 
 ###### `RateLimiter`
-API rate limiting functionality.
+API rate limiting functionality with in-memory storage.
 
 **Methods:**
-- `check_rate_limit(identifier, requests, window)` -> bool: Check rate limit
-- `get_remaining_requests(identifier)` -> int: Get remaining requests
+- `check_rate_limit(identifier, requests, window)` -> bool: Check if request is within rate limits
+- `get_remaining_requests(identifier)` -> int: Get remaining requests for an identifier
+
+**Parameters:**
+- `identifier` (str): Unique client identifier
+- `requests` (int): Max requests allowed (default: 100)
+- `window` (int): Time window in seconds (default: 60)
 
 ###### `SecretManager`
-Secure secret storage and retrieval.
+Secure secret storage and retrieval from environment variables and Streamlit secrets.
 
 **Methods:**
-- `get_secret(key, default)` -> Optional[str]: Get secret value
-- `hash_sensitive_data(data, salt)` -> str: Hash sensitive data
+- `get_secret(key, default)` -> Optional[str]: Get secret from env vars or Streamlit secrets
+- `hash_sensitive_data(data, salt)` -> str: Hash sensitive data using SHA256
+
+**Parameters:**
+- `key` (str): Secret key name
+- `default` (Optional[str]): Default value if not found
+- `data` (str): Data to hash
+- `salt` (Optional[str]): Optional salt for hashing
 
 ###### `SecurityHeaders`
-Security header management.
+Security header management for web applications.
 
 **Methods:**
-- `apply_security_headers()`: Apply security headers
-- `validate_request_origin(headers)` -> bool: Validate request origin
+- `apply_security_headers()`: Log security headers for manual web server configuration
+- `validate_request_origin(request_headers)` -> bool: Validate request origin for CORS-like protection
+
+##### Functions
+
+###### `initialize_security()`
+Initialize security measures for the application.
+
+**Returns:** None
+
+###### `secure_file_operation(filepath, operation)`
+Check if file operation is secure.
+
+**Parameters:**
+- `filepath` (str): File path to check
+- `operation` (str): Operation type ('read', 'write', 'execute')
+
+**Returns:** bool: True if operation is allowed
+
+###### `audit_log(action, user_id, details)`
+Log security-related actions for audit purposes.
+
+**Parameters:**
+- `action` (str): Action performed
+- `user_id` (Optional[str]): User identifier
+- `details` (Optional[Dict[str, Any]]): Additional details
+
+**Returns:** None
+
+#### wb_svc_client.py
+
+Client for NVIDIA AI Workbench GraphQL API with Unix socket and HTTP support.
+
+##### Functions
+
+###### `query(query_str)`
+Send a GraphQL query over Unix socket or HTTP.
+
+**Parameters:**
+- `query_str` (str): GraphQL query string
+
+**Returns:** dict: Query response data
+
+**Raises:** Exception if rate limit exceeded
+
+###### `list_projects()`
+List all projects with name, id, and path.
+
+**Returns:** dict[str, Any]: Projects data
+
+###### `get_project_path(project_name)`
+Find the file system path for a project.
+
+**Parameters:**
+- `project_name` (str): Name of the project
+
+**Returns:** Optional[str]: Project path or None if not found
+
+###### `get_project(project_name)`
+Get detailed project information.
+
+**Parameters:**
+- `project_name` (str): Name of the project
+
+**Returns:** Optional[dict[str, Any]]: Project details or None if not found
+
+###### `get_file(project_name, relative_path, filename)`
+Retrieve file contents from a project.
+
+**Parameters:**
+- `project_name` (str): Name of the project
+- `relative_path` (str): Relative path within project
+- `filename` (str): Name of the file
+
+**Returns:** dict[str, Any]: File data including contents
+
+###### `get_packages(project_name)`
+List installed packages in a project environment.
+
+**Parameters:**
+- `project_name` (str): Name of the project
+
+**Returns:** Optional[dict[str, Any]]: Package information or None
+
+###### `get_gpu_request(project_name)`
+Query GPU resource allocation for a project.
+
+**Parameters:**
+- `project_name` (str): Name of the project
+
+**Returns:** Optional[dict[str, Any]]: GPU request data or None
 
 ## Page Modules
 
