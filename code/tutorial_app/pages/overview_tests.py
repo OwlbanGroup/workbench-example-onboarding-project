@@ -15,12 +15,17 @@
 """Tests for auto continuing associated tasks."""
 from pathlib import Path
 import sys
+import tempfile
 
 try:
     from common import testing
 except ImportError:
     # this helps with debugging and allows direct importing or execution
-    sys.path.append("..")
+    import os
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.insert(0, parent_dir)
     from common import testing
 
 
@@ -54,9 +59,6 @@ def wait_for_jupyterlab_stop():
 
 def wait_three_times():
     """Wait for a few calls."""
-    import tempfile
-    import os
-
     # Use system temp directory instead of /tmp
     temp_dir = tempfile.gettempdir()
 
@@ -67,15 +69,15 @@ def wait_three_times():
                 with marker.open("w", encoding="utf-8"):
                     pass
                 raise testing.TestFail(f"info_wait_{idx}")
-            except Exception as e:
-                print(f"Skipping test: Cannot create temp file - {e}")
+            except (OSError, PermissionError):
+                # Skipping test: Cannot create temp file
                 return
 
     for idx in range(3):
         marker = Path(temp_dir) / f"file{idx}"
         try:
             marker.unlink()
-        except Exception:
+        except (OSError, FileNotFoundError):
             pass  # Ignore if file doesn't exist or can't be deleted
 
 

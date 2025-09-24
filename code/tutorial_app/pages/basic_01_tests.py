@@ -23,7 +23,11 @@ try:
     from common import wb_svc_client
 except ImportError:
     # this helps with debugging and allows direct importing or execution
-    sys.path.append("..")
+    import os
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.insert(0, parent_dir)
     from common import testing
     from common import wb_svc_client
 
@@ -44,7 +48,7 @@ def check_folder_exists() -> dict[str, Any]:
     _ = testing.get_folder(PROJECT_NAME, ROOT_DIR, FOLDER_NAME)
 
 
-def check_file_in_folder() -> dict[str, Any]:
+def check_file_in_folder() -> None:
     """Check if any file exists in my-first-folder."""
     import os
 
@@ -52,14 +56,12 @@ def check_file_in_folder() -> dict[str, Any]:
     # Check for any non-hidden file
     for filename in os.listdir(folder_path):
         if not filename.startswith("."):
-            return None  # Found at least one non-hidden file
+            return  # Found at least one non-hidden file
 
     raise testing.TestFail("info_wait_for_file_upload")
 
-    # Don't return anything, just like other test functions
 
-
-def check_file_deleted() -> dict[str, Any]:
+def check_file_deleted() -> None:
     """Check if the file is deleted."""
     import os
 
@@ -69,24 +71,20 @@ def check_file_deleted() -> dict[str, Any]:
     if os.path.exists(os.path.join(folder_path, DELETE_ME_FILE_NAME)):
         raise testing.TestFail("info_wait_for_delete")
 
-    return None
 
-
-def check_file_changed() -> dict[str, Any]:
+def check_file_changed() -> None:
     """Check if example-file.txt has been modified."""
     import os
 
     file_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME, "example-file.txt")
 
     # Read the file contents
-    with open(file_path, "r") as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         content = f.read().strip()
 
     # Check if content is different from original
     if content == "this is an example":
         raise testing.TestFail("info_wait_for_edit")
-
-    return None
 
 
 def add_ubuntu_package():

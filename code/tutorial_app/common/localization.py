@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES.
+# All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,10 +36,7 @@ def load_messages(form_path: str) -> dict[str, str]:
         _LOGGER.info("Message file %s not found. Falling back to %s", catalog, DEFAULT_LOCALE)
         catalog = ".".join([base_path, DEFAULT_LOCALE, "yaml"])
     if not os.path.isfile(catalog):
-        _LOGGER.critical(
-            "Cannot find the preferred or default language messages file in %s.",
-            catalog,
-        )
+        _LOGGER.critical("Cannot find the preferred or default language messages file in %s.", catalog)
 
     # read the yaml file
     with open(catalog, "r", encoding="UTF-8") as ptr:

@@ -29,7 +29,7 @@ def run_test(fun) -> tuple[bool, None | str, None | Any]:
     # importing streamlit outside of the toplevel to prevent
     # nuisance warnings while developing testing code.
     # pylint: disable-next=import-outside-toplevel
-    import streamlit as st
+    import streamlit as st  # type: ignore
 
     mod_name = fun.__module__.split(".")[-1]
     idx = mod_name + "_" + fun.__name__
@@ -283,6 +283,7 @@ def get_file(project_name: str, directory: str, filename: str) -> bytes:
 
     return base64.b64decode(wb_file["contents"])
 
+
 def get_folder(project_name: str, directory: str, folder_name: str) -> dict[str, Any]:
     """Retrieve a folder from a project.
 
@@ -292,12 +293,13 @@ def get_folder(project_name: str, directory: str, folder_name: str) -> dict[str,
     response = wb_svc_client.get_file(project_name, directory, folder_name) or {}
     if response is None:
         raise TestFail("info_wait_for_folder")
-    
+
     wb_file = response.get("data", {}).get("project", {}).get("file")
     if wb_file is None or not wb_file.get("isDirectory", False):
         raise TestFail("info_wait_for_folder")
-    
+
     return wb_file
+
 
 def ensure_gpu_count(project_name: str):
     """Ensure that a project has a valid GPU count (including 0).
@@ -306,12 +308,7 @@ def ensure_gpu_count(project_name: str):
         - info_wait_for_project
     """
     response = wb_svc_client.get_gpu_request(project_name) or {}
-    gpu_count = (
-        response.get("data", {})
-                .get("project", {})
-                .get("resources", {})
-                .get("gpusRequested")
-    )
+    gpu_count = response.get("data", {}).get("project", {}).get("resources", {}).get("gpusRequested")
 
     if gpu_count is None:
         raise TestFail("info_wait_for_project")

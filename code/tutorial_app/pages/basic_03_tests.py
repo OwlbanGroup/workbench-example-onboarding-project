@@ -21,14 +21,16 @@ try:
     from common import wb_svc_client
 except ImportError:
     # this helps with debugging and allows direct importing or execution
-    sys.path.append("..")
+    import os
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.insert(0, parent_dir)
     from common.testing import TestFail
     from common import wb_svc_client
 
 PROJECT_NAME = "my-first-project"
 BRANCH_NAME = "my-first-branch"
-
-# TODO: add step to setup git server integration
 
 
 def get_project() -> dict[str, Any]:
@@ -99,7 +101,7 @@ def wait_for_proj():
             raise TestFail("info_wait_for_proj")
     except OSError as e:
         if "Socket" in str(e) or "does not exist" in str(e):
-            print("Skipping test: Workbench service not available in local environment")
+            # Skipping test: Workbench service not available in local environment
             return
         raise
 

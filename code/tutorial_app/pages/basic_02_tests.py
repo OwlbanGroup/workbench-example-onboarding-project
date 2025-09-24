@@ -85,21 +85,18 @@ def add_python_packages():
     pkg = testing.ensure_package(PROJECT_NAME, "pip", PYTHON_PACKAGE_2)
     return pkg
 
-def add_ubuntu_package():
-#    """Wait for the package to be added."""
-#    testing.ensure_package(PROJECT_NAME, "apt", UBUNTU_PACKAGE)
 
+def add_ubuntu_package():
     """Check if 'jq' appears in the file."""
     import os
-    
+
     file_path = os.path.join(PROJECT_DIR, "apt.txt")
-    
-    with open(file_path, 'r') as f:
-        content = testing.get_file(PROJECT_NAME, ".", "apt.txt").decode('UTF-8')
-    
+
+    content = testing.get_file(PROJECT_NAME, ".", "apt.txt").decode("UTF-8")
+
     if "jq" not in content:
         raise testing.TestFail("info_wait_for_package")
-            
+
     return None
 
 

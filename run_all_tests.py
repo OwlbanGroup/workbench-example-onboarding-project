@@ -1,3 +1,5 @@
+"""Script to run all test files in the tutorial app."""
+
 import subprocess
 import sys
 import os
@@ -20,6 +22,7 @@ for test_file in test_files:
             [sys.executable, test_file],
             capture_output=True,
             text=True,
+            check=False,
             env={**os.environ, "PYTHONPATH": "code/tutorial_app"},
         )
         if result.returncode == 0:
