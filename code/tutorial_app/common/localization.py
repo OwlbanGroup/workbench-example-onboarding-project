@@ -31,10 +31,13 @@ def load_messages(form_path: str) -> dict[str, str]:
     # find the yaml file
     base_path = os.path.splitext(form_path)[0]
     here = locale.getlocale()[0]
-    catalog = ".".join([base_path, here, "yaml"])
+    if here:
+        catalog = f"{base_path}.{here}.yaml"
+    else:
+        catalog = f"{base_path}.{DEFAULT_LOCALE}"
     if not os.path.isfile(catalog):
         _LOGGER.info("Message file %s not found. Falling back to %s", catalog, DEFAULT_LOCALE)
-        catalog = ".".join([base_path, DEFAULT_LOCALE, "yaml"])
+        catalog = f"{base_path}.{DEFAULT_LOCALE}"
     if not os.path.isfile(catalog):
         _LOGGER.critical("Cannot find the preferred or default language messages file in %s.", catalog)
 

@@ -1,6 +1,7 @@
 # Pylint Configuration
 [tool.pylint.MAIN]
 load-plugins = "pylint.extensions.bad_builtin"
+ignore-paths = [".venv/.*"]
 
 [tool.pylint.'MESSAGES CONTROL']
 disable=["raw-checker-failed",

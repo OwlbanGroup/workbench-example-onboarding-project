@@ -88,16 +88,10 @@ def add_python_packages():
 
 def add_ubuntu_package():
     """Check if 'jq' appears in the file."""
-    import os
-
-    file_path = os.path.join(PROJECT_DIR, "apt.txt")
-
     content = testing.get_file(PROJECT_NAME, ".", "apt.txt").decode("UTF-8")
 
     if "jq" not in content:
         raise testing.TestFail("info_wait_for_package")
-
-    return None
 
 
 def rebuild_environment():

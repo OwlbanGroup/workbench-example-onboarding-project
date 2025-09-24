@@ -17,7 +17,7 @@ import base64
 from enum import Enum
 from typing import cast, Any
 
-from common import wb_svc_client
+from . import wb_svc_client
 
 
 class TestFail(Exception):

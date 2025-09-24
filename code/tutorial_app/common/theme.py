@@ -25,7 +25,7 @@ import streamlit as st
 from streamlit_autorefresh import st_autorefresh
 from streamlit_extras.stateful_button import button
 
-from common import sidebar, testing
+from . import sidebar, testing
 
 STATE_FILE = "/project/data/scratch/tutorial_state.json"
 STYLESHEETS = [Path(__file__).parent.joinpath("style.css")]

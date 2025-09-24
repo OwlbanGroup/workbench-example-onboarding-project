@@ -18,8 +18,8 @@ from pathlib import Path
 
 import streamlit as st
 
-from common import localization, theme
-from pages import overview_tests as TESTS
+from ..common import localization, theme
+from . import overview_tests as TESTS
 
 MESSAGES = localization.load_messages(__file__)
 NAME = Path(__file__).stem

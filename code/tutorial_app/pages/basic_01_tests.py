@@ -14,8 +14,7 @@
 # limitations under the License.
 """Tests for auto continuing associated tasks."""
 from typing import Any
-
-# Removed unused import
+import os
 import sys
 
 try:
@@ -23,8 +22,6 @@ try:
     from common import wb_svc_client
 except ImportError:
     # this helps with debugging and allows direct importing or execution
-    import os
-
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     sys.path.insert(0, parent_dir)
@@ -50,8 +47,6 @@ def check_folder_exists() -> dict[str, Any]:
 
 def check_file_in_folder() -> None:
     """Check if any file exists in my-first-folder."""
-    import os
-
     folder_path = os.path.join(PROJECT_DIR, FOLDER_NAME)
     # Check for any non-hidden file
     for filename in os.listdir(folder_path):
@@ -63,8 +58,6 @@ def check_file_in_folder() -> None:
 
 def check_file_deleted() -> None:
     """Check if the file is deleted."""
-    import os
-
     folder_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME)
 
     # Check if delete-me.txt still exists
@@ -74,8 +67,6 @@ def check_file_deleted() -> None:
 
 def check_file_changed() -> None:
     """Check if example-file.txt has been modified."""
-    import os
-
     file_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME, "example-file.txt")
 
     # Read the file contents
