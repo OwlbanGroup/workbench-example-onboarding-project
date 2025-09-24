@@ -5,14 +5,14 @@ import sys
 import os
 
 test_files = [
-    "code/tutorial_app/pages/advanced_02_tests.py",
-    "code/tutorial_app/pages/advanced_03_tests.py",
-    "code/tutorial_app/pages/basic_01_tests.py",
-    "code/tutorial_app/pages/basic_02_tests.py",
-    "code/tutorial_app/pages/basic_03_tests.py",
-    "code/tutorial_app/pages/overview_tests.py",
-    "code/tutorial_app/pages/owlban_group_tests.py",
-    "code/tutorial_app/pages/settings_tests.py",
+    "src/tutorial_app/pages/advanced_02_tests.py",
+    "src/tutorial_app/pages/advanced_03_tests.py",
+    "src/tutorial_app/pages/basic_01_tests.py",
+    "src/tutorial_app/pages/basic_02_tests.py",
+    "src/tutorial_app/pages/basic_03_tests.py",
+    "src/tutorial_app/pages/overview_tests.py",
+    "src/tutorial_app/pages/owlban_group_tests.py",
+    "src/tutorial_app/pages/settings_tests.py",
 ]
 
 for test_file in test_files:
@@ -23,7 +23,7 @@ for test_file in test_files:
             capture_output=True,
             text=True,
             check=False,
-            env={**os.environ, "PYTHONPATH": "code/tutorial_app"},
+            env={**os.environ, "PYTHONPATH": "src/tutorial_app"},
         )
         if result.returncode == 0:
             print(f"✓ {test_file} passed")

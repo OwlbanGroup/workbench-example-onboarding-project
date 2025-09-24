@@ -24,12 +24,18 @@ from typing import Any
 import requests
 from httpunixsocketconnection import HTTPUnixSocketConnection
 
+from .security import RateLimiter
+
 GQL_SOCKET = "/wb-svc-ro.socket"
 QUERY_TIMEOUT = 3
 
 
 def query(query_str: str):
     """Send a GraphQL query over a Unix socket."""
+    # Check rate limit
+    if not RateLimiter.check_rate_limit("api_client"):
+        raise Exception("API rate limit exceeded. Please try again later.")
+
     api_host = os.getenv("NVWB_API")
     if api_host:
         req = requests.post(

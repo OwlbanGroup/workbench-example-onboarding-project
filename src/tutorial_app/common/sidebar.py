@@ -44,10 +44,11 @@ except ImportError:
 import streamlit as st
 
 from . import icons
+from .security import SecretManager
 
 # Constants
 SIDEBAR_YAML_PATH: Path = Path(__file__).parent.parent.joinpath("pages", "sidebar.yaml")
-BASE_URL: str = os.environ.get("PROXY_PREFIX", "")
+BASE_URL: str = SecretManager.get_secret("PROXY_PREFIX", "")
 DEFAULT_PAGE_EXTENSION: str = ".py"
 PAGES_DIRECTORY: str = "pages"
 PROGRESS_COMPLETED: str = "✅"

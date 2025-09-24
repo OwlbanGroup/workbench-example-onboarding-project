@@ -1,4 +1,8 @@
-"""Top level streamlit app page."""
+"""Top level streamlit app page with security enhancements."""
+
+import sys
+
+sys.path.append(".")
 
 import streamlit as st
 
