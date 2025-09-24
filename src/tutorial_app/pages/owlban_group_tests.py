@@ -22,7 +22,7 @@ try:
     from common import testing
 except ImportError:
     # this helps with debugging and allows direct importing or execution
-    sys.path.append("..")
+    sys.path.append(str(Path(__file__).parent.parent))
     from common import testing
 
 
@@ -106,7 +106,7 @@ def check_nvidia_integration():
     # Check deployment configurations
     deploy_configs = [
         "deploy/environments/production.env",
-        "deploy/docker-compose.yml",
+        "docker-compose.yml",
         "deploy/kubernetes/deployment.yml",
     ]
     for config in deploy_configs:
