@@ -44,6 +44,9 @@ The tutorial is organized into progressive sections:
 2. Custom Container Usage
 3. Advanced RAG Applications
 
+### Sneak Peeks
+- Owlban Group Onboarding: A dedicated section for integrating and onboarding new members to the Owlban Group, including setup tasks and communication guidelines.
+
 ## Get Started
 
 1. Clone this project into the AI Workbench desktop app

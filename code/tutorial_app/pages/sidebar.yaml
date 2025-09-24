@@ -26,6 +26,8 @@ navbar:
     children:
       - label: "⛅️ Cloud Locations with Brev"
         target: advanced_04
+      - label: "🦉 Owlban Group Onboarding"
+        target: owlban_group
       ## INSERT HERE ##
   - label: Extras
     children:

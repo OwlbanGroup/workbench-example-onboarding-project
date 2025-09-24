@@ -1,0 +1,90 @@
+# header data
+title: Owlban Group Onboarding
+waiting_msg: Click `Next` to continue.
+testing_msg: Go do the task!
+next: Next
+
+header: "Welcome to Owlban Group"
+
+welcome_msg: |
+  #### Welcome to Owlban Group
+
+  This page is dedicated to onboarding new members to the Owlban Group. Follow the tasks below to get started.
+
+tasks:
+
+  - name: Introduction to Owlban Group
+    msg: |
+      ###### About Owlban Group
+      Owlban Group is a collaborative team focused on innovative projects. This onboarding will help you integrate into the group.
+
+      1. Review the group guidelines.
+      2. Set up your workspace.
+      3. Join the communication channels.
+
+    response: Understood. Let's proceed.
+
+  - name: Set Up Your Environment
+    msg: |
+      ###### Environment Setup
+      Ensure you have the necessary tools installed:
+      - Python 3.8+
+      - Streamlit
+      - Git
+
+      Run the following command to install dependencies:
+      ```
+      pip install -r requirements.txt
+      ```
+
+    response: Environment is set up.
+    test: check_environment_setup
+
+  - name: Join Communication Channels
+    msg: |
+      ###### Communication
+      Join the Owlban Group channels:
+      - Slack: #owlban-group
+      - GitHub: Follow the repository
+      - Email: owlban-group@example.com
+
+    response: Joined the channels.
+
+  - name: Complete Onboarding
+    msg: |
+      ###### Final Steps
+      Complete the onboarding by:
+      1. Reading the project README.
+      2. Running the tutorial app.
+      3. Contributing to the first issue.
+
+    response: Onboarding complete!
+
+# footer data
+closing_msg: |
+  ##### Congratulations! You are now onboarded to Owlban Group.
+
+# testing messages
+info_wait_for_project: "Waiting for the project to exist."
+info_build_ready: ~
+info_build_needed: "It looks like your project needs you to start a new build."
+info_build_running: "Your project's build is currently running."
+info_build_error: "Uh oh! There was an error building your project."
+info_container_not_running: ~
+info_container_running: ~
+info_container_paused: "The container has been manually paused."
+info_container_dead: "Uh oh! The container does not seem healthy."
+info_app_is_running: ~
+info_app_not_running: "Waiting for you to start the application."
+info_app_starting: "The application is starting up!"
+info_compose_is_running: "Docker Compose is running."
+info_compose_not_running: "Start Docker Compose from the environment tab."
+info_compose_starting: "Docker Compose is starting."
+info_compose_error: "Uh oh! Docker Compose had an error."
+info_wait_for_package: "Waiting for you to configure the necessary package."
+info_wait_for_file: "Waiting for you to create the requested file."
+
+# custom testing messages
+info_wait_0: Waiting for a bit.
+info_wait_1: Just a little bit longer.
+info_wait_2: Almost there.
