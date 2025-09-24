@@ -243,11 +243,11 @@ class TestRunner:
             assert isinstance(messages, dict)
 
             self.results['integration'] = {'status': 'PASSED', 'tests': 3}
-            print("✅ Integration tests passed")
+            print("SUCCESS: Integration tests passed")
 
         except Exception as e:
             self.results['integration'] = {'status': 'FAILED', 'error': str(e)}
-            print(f"❌ Integration tests failed: {e}")
+            print(f"ERROR: Integration tests failed: {e}")
 
         return self.results['integration']
 
@@ -272,11 +272,11 @@ class TestRunner:
             assert links.documentation == 'https://example.com'
 
             self.results['property'] = {'status': 'PASSED', 'tests': 3}
-            print("✅ Property-based tests passed")
+            print("SUCCESS: Property-based tests passed")
 
         except Exception as e:
             self.results['property'] = {'status': 'FAILED', 'error': str(e)}
-            print(f"❌ Property-based tests failed: {e}")
+            print(f"ERROR: Property-based tests failed: {e}")
 
         return self.results['property']
 
@@ -293,17 +293,17 @@ class TestRunner:
             monitor.assert_performance(save_state, TestConfig.MAX_EXECUTION_TIME)
 
             self.results['performance'] = {'status': 'PASSED', 'tests': 3}
-            print("✅ Performance tests passed")
+            print("SUCCESS: Performance tests passed")
 
         except Exception as e:
             self.results['performance'] = {'status': 'FAILED', 'error': str(e)}
-            print(f"❌ Performance tests failed: {e}")
+            print(f"ERROR: Performance tests failed: {e}")
 
         return self.results['performance']
 
     def run_all_tests(self) -> Dict[str, Any]:
         """Run all test suites."""
-        print("🏃 Running comprehensive test suite...")
+        print("RUNNING: Running comprehensive test suite...")
 
         self.run_integration_tests()
         self.run_property_tests()
