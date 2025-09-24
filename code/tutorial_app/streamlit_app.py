@@ -1,5 +1,9 @@
 """Top level streamlit app page."""
 
+import sys
+
+sys.path.append(".")
+
 import streamlit as st
 
 from common.sidebar import APP_SIDEBAR
