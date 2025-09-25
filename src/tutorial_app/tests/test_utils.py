@@ -13,6 +13,7 @@ import time
 
 # Add the parent directory to the path for imports
 import sys
+
 sys.path.append(str(Path(__file__).parent.parent))
 
 from common.sidebar import Sidebar, MenuItem, Menu, Links
@@ -27,10 +28,7 @@ class TestDataGenerator:
     @staticmethod
     def create_valid_menu_items(count: int = 5) -> List[MenuItem]:
         """Create valid menu items for testing."""
-        return [
-            MenuItem(label=f'Test Item {i}', target=f'test_target_{i}')
-            for i in range(count)
-        ]
+        return [MenuItem(label=f"Test Item {i}", target=f"test_target_{i}") for i in range(count)]
 
     @staticmethod
     def create_nested_menu_structure() -> Menu:
@@ -40,24 +38,24 @@ class TestDataGenerator:
 
         # Create parent items
         parent_items = [
-            MenuItem(label='Parent Item 1', target='parent_1'),
-            MenuItem(label='Parent Item 2', target='parent_2')
+            MenuItem(label="Parent Item 1", target="parent_1"),
+            MenuItem(label="Parent Item 2", target="parent_2"),
         ]
 
         # Create nested menu
-        child_menu = Menu(label='Child Menu', children=child_items)
+        child_menu = Menu(label="Child Menu", children=child_items)
         parent_items.append(child_menu)
 
-        return Menu(label='Parent Menu', children=parent_items)
+        return Menu(label="Parent Menu", children=parent_items)
 
     @staticmethod
     def create_sidebar_with_progress_data() -> Sidebar:
         """Create a sidebar with mock progress data."""
         items = TestDataGenerator.create_valid_menu_items(4)
-        menu = Menu(label='Test Menu', children=items)
-        links = Links(documentation='https://example.com')
+        menu = Menu(label="Test Menu", children=items)
+        links = Links(documentation="https://example.com")
 
-        return Sidebar(header='Test Header', navbar=[menu], links=links)
+        return Sidebar(header="Test Header", navbar=[menu], links=links)
 
     @staticmethod
     def create_mock_session_state(progress_data: Dict[str, Any]) -> MagicMock:
@@ -75,15 +73,18 @@ class TestFixtures:
     @pytest.fixture
     def temp_state_file() -> Generator[str, None, None]:
         """Create a temporary state file for testing."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-            json.dump({
-                'basic_01_completed': 3,
-                'basic_01_total': 3,
-                'basic_02_completed': 1,
-                'basic_02_total': 2,
-                'advanced_01_completed': 0,
-                'advanced_01_total': 5
-            }, f)
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(
+                {
+                    "basic_01_completed": 3,
+                    "basic_01_total": 3,
+                    "basic_02_completed": 1,
+                    "basic_02_total": 2,
+                    "advanced_01_completed": 0,
+                    "advanced_01_total": 5,
+                },
+                f,
+            )
             temp_file = f.name
 
         yield temp_file
@@ -96,7 +97,7 @@ class TestFixtures:
     @pytest.fixture
     def mock_streamlit_session() -> Generator[MagicMock, None, None]:
         """Mock Streamlit session state for testing."""
-        with patch('streamlit.session_state') as mock_session:
+        with patch("streamlit.session_state") as mock_session:
             mock_session.get.return_value = None
             mock_session.__setitem__ = MagicMock()
             yield mock_session
@@ -109,7 +110,7 @@ class TestFixtures:
 
     @staticmethod
     @pytest.fixture
-    def performance_monitor() -> 'PerformanceMonitor':
+    def performance_monitor() -> "PerformanceMonitor":
         """Create a performance monitor for benchmarking."""
         return PerformanceMonitor()
 
@@ -134,8 +135,7 @@ class PerformanceMonitor:
         """Assert that a function executes within performance threshold."""
         execution_time = self.benchmark_function(func, *args, **kwargs)
         assert execution_time <= max_time, (
-            f"Function {func.__name__} took {execution_time:.4f}s, "
-            f"exceeding threshold of {max_time}s"
+            f"Function {func.__name__} took {execution_time:.4f}s, " f"exceeding threshold of {max_time}s"
         )
 
     def set_baseline(self, name: str, func: Callable, *args, **kwargs) -> None:
@@ -198,7 +198,7 @@ class TestValidator:
         if not item.target:
             issues.append("MenuItem missing target")
 
-        if not item.filepath.endswith('.py'):
+        if not item.filepath.endswith(".py"):
             issues.append(f"MenuItem filepath doesn't end with .py: {item.filepath}")
 
         return issues
@@ -236,20 +236,20 @@ class TestRunner:
             # Test theme operations
             load_state()
             save_state()
-            ensure_state('test_key', 'test_value')
+            ensure_state("test_key", "test_value")
 
             # Test localization
-            messages = load_messages('code/tutorial_app/pages/basic_01.py')
+            messages = load_messages("code/tutorial_app/pages/basic_01.py")
             assert isinstance(messages, dict)
 
-            self.results['integration'] = {'status': 'PASSED', 'tests': 3}
+            self.results["integration"] = {"status": "PASSED", "tests": 3}
             print("SUCCESS: Integration tests passed")
 
         except Exception as e:
-            self.results['integration'] = {'status': 'FAILED', 'error': str(e)}
+            self.results["integration"] = {"status": "FAILED", "error": str(e)}
             print(f"ERROR: Integration tests failed: {e}")
 
-        return self.results['integration']
+        return self.results["integration"]
 
     def run_property_tests(self) -> Dict[str, Any]:
         """Run property-based tests."""
@@ -257,28 +257,28 @@ class TestRunner:
 
         try:
             # Test MenuItem properties
-            item = MenuItem(label='Test Label', target='test_target')
-            assert item.label == 'Test Label'
-            assert item.target == 'test_target'
+            item = MenuItem(label="Test Label", target="test_target")
+            assert item.label == "Test Label"
+            assert item.target == "test_target"
             assert isinstance(item.progress_string, str)
 
             # Test Menu properties
-            menu = Menu(label='Test Menu', children=[item])
-            assert menu.label == 'Test Menu'
+            menu = Menu(label="Test Menu", children=[item])
+            assert menu.label == "Test Menu"
             assert len(menu.children) == 1
 
             # Test Links properties
-            links = Links(documentation='https://example.com')
-            assert links.documentation == 'https://example.com'
+            links = Links(documentation="https://example.com")
+            assert links.documentation == "https://example.com"
 
-            self.results['property'] = {'status': 'PASSED', 'tests': 3}
+            self.results["property"] = {"status": "PASSED", "tests": 3}
             print("SUCCESS: Property-based tests passed")
 
         except Exception as e:
-            self.results['property'] = {'status': 'FAILED', 'error': str(e)}
+            self.results["property"] = {"status": "FAILED", "error": str(e)}
             print(f"ERROR: Property-based tests failed: {e}")
 
-        return self.results['property']
+        return self.results["property"]
 
     def run_performance_tests(self) -> Dict[str, Any]:
         """Run performance tests."""
@@ -292,14 +292,14 @@ class TestRunner:
             monitor.assert_performance(load_state, TestConfig.MAX_EXECUTION_TIME)
             monitor.assert_performance(save_state, TestConfig.MAX_EXECUTION_TIME)
 
-            self.results['performance'] = {'status': 'PASSED', 'tests': 3}
+            self.results["performance"] = {"status": "PASSED", "tests": 3}
             print("SUCCESS: Performance tests passed")
 
         except Exception as e:
-            self.results['performance'] = {'status': 'FAILED', 'error': str(e)}
+            self.results["performance"] = {"status": "FAILED", "error": str(e)}
             print(f"ERROR: Performance tests failed: {e}")
 
-        return self.results['performance']
+        return self.results["performance"]
 
     def run_all_tests(self) -> Dict[str, Any]:
         """Run all test suites."""
@@ -310,28 +310,21 @@ class TestRunner:
         self.run_performance_tests()
 
         # Summary
-        total_tests = sum(
-            suite.get('tests', 0)
-            for suite in self.results.values()
-            if suite.get('status') == 'PASSED'
-        )
+        total_tests = sum(suite.get("tests", 0) for suite in self.results.values() if suite.get("status") == "PASSED")
 
-        failed_suites = [
-            name for name, result in self.results.items()
-            if result.get('status') == 'FAILED'
-        ]
+        failed_suites = [name for name, result in self.results.items() if result.get("status") == "FAILED"]
 
-        print("
-📊 Test Summary:"        print(f"   Total test suites: {len(self.results)}")
+        print("\n📊 Test Summary:")
+        print(f"   Total test suites: {len(self.results)}")
         print(f"   Passed: {len(self.results) - len(failed_suites)}")
         print(f"   Failed: {len(failed_suites)}")
         print(f"   Total tests: {total_tests}")
 
         if failed_suites:
             print(f"   Failed suites: {', '.join(failed_suites)}")
-            return {'status': 'FAILED', 'failed_suites': failed_suites}
+            return {"status": "FAILED", "failed_suites": failed_suites}
 
-        return {'status': 'PASSED', 'total_tests': total_tests}
+        return {"status": "PASSED", "total_tests": total_tests}
 
 
 # Convenience functions for common testing patterns

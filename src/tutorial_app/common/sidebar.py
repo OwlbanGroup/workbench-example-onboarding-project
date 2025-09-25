@@ -16,9 +16,13 @@ Example:
 """
 
 import logging
-import os
 from pathlib import Path
-from typing import List, Optional, Tuple, Dict, Any
+from typing import List, Optional, Tuple
+
+import streamlit as st
+
+from . import icons
+from .security import SecretManager
 
 # Configure logging first
 logger = logging.getLogger(__name__)
@@ -40,11 +44,6 @@ except ImportError:
     except ImportError:
         parse_yaml_raw_as = None
         logger.warning("pydantic_yaml not available, YAML loading disabled")
-
-import streamlit as st
-
-from . import icons
-from .security import SecretManager
 
 # Constants
 SIDEBAR_YAML_PATH: Path = Path(__file__).parent.parent.joinpath("pages", "sidebar.yaml")
@@ -111,8 +110,8 @@ class MenuItem(BaseModel):
                 return PROGRESS_COMPLETED
             return PROGRESS_FORMAT.format(completed=completed, total=total)
 
-        except Exception as e:
-            logger.warning(f"Error calculating progress for {self.target}: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.warning("Error calculating progress for %s: %s", self.target, e)
             return PROGRESS_NOT_STARTED
 
     @property
@@ -267,11 +266,11 @@ class Sidebar(BaseModel):
                 yaml_content = ptr.read()
 
             sidebar = parse_yaml_raw_as(cls, yaml_content)
-            logger.info(f"Successfully loaded sidebar from {SIDEBAR_YAML_PATH}")
+            logger.info("Successfully loaded sidebar from %s", SIDEBAR_YAML_PATH)
             return sidebar
 
-        except Exception as e:
-            logger.error(f"Failed to load sidebar from YAML: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to load sidebar from YAML: %s", e)
             raise RuntimeError(f"Could not load sidebar configuration: {e}")
 
     @property
@@ -294,35 +293,35 @@ class Sidebar(BaseModel):
                         return st.Page(item.filepath)
             return st.Page(f"{PAGES_DIRECTORY}/start{DEFAULT_PAGE_EXTENSION}")
 
-        except Exception as e:
-            logger.error(f"Failed to create home page: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to create home page: %s", e)
             raise RuntimeError(f"Could not create home page: {e}")
 
     @property
     def page_list(self) -> List[str]:
-        """Return a list of Streamlit pages for multipage navigation.
+        """Return a list of page file paths for multipage navigation.
 
-        Creates a flat list of all pages from the menu structure for
+        Creates a flat list of all page file paths from the menu structure for
         Streamlit's multipage navigation system.
 
         Returns:
-            List of Streamlit Page objects
+            List of page file paths
 
         Raises:
-            RuntimeError: If page creation fails
+            RuntimeError: If page list creation fails
         """
         try:
             pages = []
             for menu in self.navbar:
                 for item in menu.children:
                     if item and item.target:
-                        pages.append(st.Page(item.filepath))
+                        pages.append(item.filepath)
 
-            logger.debug(f"Created page list with {len(pages)} pages")
+            logger.debug("Created page list with %d pages", len(pages))
             return pages
 
-        except Exception as e:
-            logger.error(f"Failed to create page list: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to create page list: %s", e)
             raise RuntimeError(f"Could not create page list: {e}")
 
     def prev_and_next_nav(self, page_name: str) -> Tuple[Optional[str], Optional[str]]:
@@ -347,17 +346,17 @@ class Sidebar(BaseModel):
             try:
                 page_idx = all_pages.index(current_page_path)
             except ValueError:
-                logger.warning(f"Page '{page_name}' not found in navigation")
+                logger.warning("Page '%s' not found in navigation", page_name)
                 return None, None
 
             prev_page = all_pages[page_idx - 1] if page_idx > 0 else None
             next_page = all_pages[page_idx + 1] if page_idx < len(all_pages) - 1 else None
 
-            logger.debug(f"Navigation for '{page_name}': prev={prev_page}, next={next_page}")
+            logger.debug("Navigation for '%s': prev=%s, next=%s", page_name, prev_page, next_page)
             return prev_page, next_page
 
-        except Exception as e:
-            logger.error(f"Error in navigation calculation for '{page_name}': {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Error in navigation calculation for '%s': %s", page_name, e)
             return None, None
 
     def render_header(self) -> None:
@@ -368,9 +367,9 @@ class Sidebar(BaseModel):
         try:
             if self.header:
                 st.markdown(f"## {self.header}")
-                logger.debug(f"Rendered sidebar header: {self.header}")
-        except Exception as e:
-            logger.error(f"Failed to render sidebar header: {e}")
+                logger.debug("Rendered sidebar header: %s", self.header)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to render sidebar header: %s", e)
             # Don't raise - just log and continue to prevent UI breakage
 
     def render_navbar(self) -> None:
@@ -389,8 +388,8 @@ class Sidebar(BaseModel):
                     if item and item.target:
                         st.page_link(page=item.filepath, label=item.full_label, use_container_width=True)
             logger.debug("Successfully rendered navigation menu")
-        except Exception as e:
-            logger.error(f"Failed to render navigation menu: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to render navigation menu: %s", e)
             # Don't raise - just log and continue to prevent UI breakage
 
     def render_links(self) -> None:
@@ -424,8 +423,8 @@ class Sidebar(BaseModel):
             st.html(html_content)
             logger.debug("Successfully rendered external links toolbar")
 
-        except Exception as e:
-            logger.error(f"Failed to render external links: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to render external links: %s", e)
             # Don't raise - just log and continue to prevent UI breakage
 
     def render(self) -> None:
@@ -441,8 +440,8 @@ class Sidebar(BaseModel):
             self.render_navbar()
             logger.info("Successfully completed sidebar render")
 
-        except Exception as e:
-            logger.error(f"Failed to render sidebar: {e}")
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            logger.error("Failed to render sidebar: %s", e)
             # Don't raise - just log and continue to prevent UI breakage
 
 

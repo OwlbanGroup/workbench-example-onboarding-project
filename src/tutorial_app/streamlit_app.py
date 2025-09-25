@@ -37,7 +37,7 @@ def main():
     with st.sidebar:
         st.write(f"Backend: {st.session_state.backend_status}")
 
-    nav = APP_SIDEBAR.page_list
+    nav = [st.Page(path) for path in APP_SIDEBAR.page_list]
     pg = st.navigation(nav)
     pg.run()
 

@@ -168,15 +168,23 @@ class TestPerformanceBenchmarks:
             "code/tutorial_app/pages/overview.py",
         ]
 
+        total_time = 0
+        count = 0
         for file_path in test_files:
             if os.path.exists(file_path):
                 metrics = self.benchmark_function(load_messages, file_path)
+                total_time += metrics.execution_time
+                count += 1
 
                 assert metrics.execution_time < 0.5, (  # 500ms should be plenty
                     f"Localization loading took {metrics.execution_time:.4f}s, " "exceeding reasonable time"
                 )
 
-        print(f"Localization loading: ~{metrics.execution_time:.4f}s per file")
+        if count > 0:
+            avg_time = total_time / count
+            print(f"Localization loading: ~{avg_time:.4f}s per file")
+        else:
+            print("No localization files found for testing")
 
     def test_complete_workflow_performance(self) -> None:
         """Benchmark complete application workflow performance."""

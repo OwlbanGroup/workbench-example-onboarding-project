@@ -5,13 +5,12 @@ security headers, rate limiting, and secret management.
 """
 
 import hashlib
-import hmac
 import logging
 import os
 import re
 import time
 from collections import defaultdict
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional
 from urllib.parse import urlparse
 
 import streamlit as st
@@ -45,8 +44,6 @@ _rate_limit_store: Dict[str, list] = defaultdict(list)
 class SecurityError(Exception):
     """Custom exception for security violations."""
 
-    pass
-
 
 class InputSanitizer:
     """Handles input sanitization and validation."""
@@ -70,7 +67,7 @@ class InputSanitizer:
 
         # Check length
         if len(text) > max_length:
-            logger.warning(f"Input length {len(text)} exceeds maximum {max_length}")
+            logger.warning("Input length %s exceeds maximum %s", len(text), max_length)
             text = text[:max_length]
 
         # Remove null bytes and other control characters
@@ -79,7 +76,7 @@ class InputSanitizer:
         # Check for dangerous patterns
         for pattern in DANGEROUS_PATTERNS:
             if re.search(pattern, text, re.IGNORECASE | re.DOTALL):
-                logger.warning(f"Dangerous pattern detected in input: {pattern}")
+                logger.warning("Dangerous pattern detected in input: %s", pattern)
                 raise SecurityError(f"Input contains dangerous content: {pattern}")
 
         return text.strip()
@@ -140,12 +137,12 @@ class InputSanitizer:
             # Check domain against whitelist
             domain = parsed.netloc.lower()
             if not any(domain.endswith(allowed) for allowed in ALLOWED_DOMAINS):
-                logger.warning(f"URL domain {domain} not in allowed list")
+                logger.warning("URL domain %s not in allowed list", domain)
                 # Allow but log - don't block for tutorial purposes
 
             return url
 
-        except Exception as e:
+        except (ValueError, TypeError) as e:
             raise SecurityError(f"Invalid URL: {e}")
 
 
@@ -176,7 +173,7 @@ class RateLimiter:
             _rate_limit_store[identifier].append(current_time)
             return True
 
-        logger.warning(f"Rate limit exceeded for {identifier}")
+        logger.warning("Rate limit exceeded for %s", identifier)
         return False
 
     @staticmethod
@@ -220,7 +217,7 @@ class SecretManager:
         try:
             if hasattr(st, "secrets") and key in st.secrets:
                 return st.secrets[key]
-        except Exception:
+        except (AttributeError, FileNotFoundError):
             pass  # Streamlit secrets not available
 
         return default
@@ -279,7 +276,7 @@ class SecurityHeaders:
         # Log security headers for manual configuration
         logger.info("Security headers should be configured in web server:")
         for header, value in security_headers.items():
-            logger.info(f"  {header}: {value}")
+            logger.info("  %s: %s", header, value)
 
     @staticmethod
     def validate_request_origin(request_headers: Dict[str, str]) -> bool:
@@ -301,7 +298,7 @@ class SecurityHeaders:
             domain = parsed.netloc
 
             return any(domain.endswith(allowed) for allowed in ALLOWED_DOMAINS)
-        except Exception:
+        except (ValueError, TypeError):
             return False
 
 
@@ -354,4 +351,4 @@ def audit_log(action: str, user_id: Optional[str] = None, details: Optional[Dict
         "details": details or {},
     }
 
-    logger.info(f"SECURITY AUDIT: {log_entry}")
+    logger.info("SECURITY AUDIT: %s", log_entry)

@@ -76,11 +76,11 @@ class TestCompleteWorkflows:
         with patch("common.theme.STATE_FILE", temp_state_file):
             # Test state loading
             load_state()
-            assert mock_session_state.get.called
+            assert mock_session_state.__setitem__.called
 
             # Test state saving
             save_state()
-            assert mock_session_state.update.called
+            assert mock_session_state.__setitem__.called
 
             # Test state ensuring
             ensure_state("test_key", "test_value")

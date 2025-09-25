@@ -8,6 +8,7 @@ from contextlib import contextmanager
 import time
 import functools
 from dataclasses import dataclass
+from unittest.mock import MagicMock
 
 
 @dataclass
@@ -70,7 +71,7 @@ def get_memory_usage() -> int:
 
 
 @contextmanager
-def mock_streamlit_session() -> Generator[None, None, None]:
+def mock_streamlit_session() -> Generator[MagicMock, None, None]:
     """Context manager to mock Streamlit session state."""
     import sys
     from unittest.mock import patch, MagicMock
@@ -78,9 +79,10 @@ def mock_streamlit_session() -> Generator[None, None, None]:
     mock_session = MagicMock()
     mock_session.get.return_value = None
     mock_session.__setitem__ = MagicMock()
+    mock_session.to_dict = MagicMock(return_value={})
 
     with patch("streamlit.session_state", mock_session):
-        yield
+        yield mock_session
 
 
 def assert_performance_threshold(func: Callable, max_time: float = 1.0) -> None:

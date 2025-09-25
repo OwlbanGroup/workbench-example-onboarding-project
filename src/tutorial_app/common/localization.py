@@ -40,6 +40,7 @@ def load_messages(form_path: str) -> dict[str, str]:
         catalog = f"{base_path}.{DEFAULT_LOCALE}"
     if not os.path.isfile(catalog):
         _LOGGER.critical("Cannot find the preferred or default language messages file in %s.", catalog)
+        return {}
 
     # read the yaml file
     with open(catalog, "r", encoding="UTF-8") as ptr:

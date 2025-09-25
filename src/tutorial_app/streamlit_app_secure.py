@@ -44,6 +44,6 @@ st.set_page_config(
     },
 )
 
-nav = APP_SIDEBAR.page_list
+nav = [st.Page(path) for path in APP_SIDEBAR.page_list]
 pg = st.navigation(nav)
 pg.run()
