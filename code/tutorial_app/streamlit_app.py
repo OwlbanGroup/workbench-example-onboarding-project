@@ -3,24 +3,26 @@
 import streamlit as st
 import httpx
 
-from .common.sidebar import APP_SIDEBAR
-from .common.middleware import setup_middleware
+from common.sidebar import APP_SIDEBAR
+from common.middleware import setup_middleware
 
 # Backend URL
 BACKEND_URL = "http://localhost:8000"
 
+# Set page config at module level (must be first Streamlit command)
+st.set_page_config(
+    page_title=APP_SIDEBAR.header,
+    layout="centered",
+    menu_items={
+        "Get help": APP_SIDEBAR.links.gethelp,
+        "Report a bug": APP_SIDEBAR.links.bugs,
+        "About": APP_SIDEBAR.links.about,
+    },
+)
+
 
 def main():
     """Main app function with middleware."""
-    st.set_page_config(
-        page_title=APP_SIDEBAR.header,
-        layout="centered",
-        menu_items={
-            "Get help": APP_SIDEBAR.links.gethelp,
-            "Report a bug": APP_SIDEBAR.links.bugs,
-            "About": APP_SIDEBAR.links.about,
-        },
-    )
 
     # Backend health check
     try:
