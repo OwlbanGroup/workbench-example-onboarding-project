@@ -15,7 +15,6 @@
 """Tests for NVIDIA AI Workbench Team Onboarding Tasks."""
 from pathlib import Path
 import sys
-import os
 import subprocess
 
 try:
@@ -30,63 +29,51 @@ def check_environment_setup():
     """Check if the NVIDIA AI Workbench environment is set up correctly."""
     issues = []
 
-    # Check for requirements.txt
-    req_file = Path("requirements.txt")
-    if not req_file.exists():
-        issues.append("requirements.txt not found in project root.")
-    else:
-        # Verify it contains essential packages
-        with open(req_file, "r") as f:
+    # File existence checks
+    file_checks = [
+        ("requirements.txt", "requirements.txt not found in project root."),
+        ("setup_nvidia_integration.sh", "NVIDIA integration file missing: setup_nvidia_integration.sh"),
+        ("setup_nvidia_integration.bat", "NVIDIA integration file missing: setup_nvidia_integration.bat"),
+        ("NVIDIA_INTEGRATION_README.md", "NVIDIA integration file missing: NVIDIA_INTEGRATION_README.md"),
+        ("variables.env", "NVIDIA integration file missing: variables.env"),
+        ("src/tutorial_app/common/security.py", "Security module not found"),
+        ("docs/DEVELOPER_GUIDE.md", "Documentation file missing: docs/DEVELOPER_GUIDE.md"),
+        ("docs/API_REFERENCE.md", "Documentation file missing: docs/API_REFERENCE.md"),
+        ("README.md", "Documentation file missing: README.md"),
+    ]
+    for file_path, message in file_checks:
+        if not Path(file_path).exists():
+            issues.append(message)
+
+    # Content checks for requirements.txt
+    if Path("requirements.txt").exists():
+        with open("requirements.txt", "r", encoding="utf-8") as f:
             content = f.read().lower()
             if "streamlit" not in content:
                 issues.append("Streamlit not found in requirements.txt")
             if "pydantic" not in content:
                 issues.append("Pydantic not found in requirements.txt")
 
-    # Check for NVIDIA integration files
-    nvidia_files = [
-        "setup_nvidia_integration.sh",
-        "setup_nvidia_integration.bat",
-        "NVIDIA_INTEGRATION_README.md",
-        "variables.env",
-    ]
-    for file in nvidia_files:
-        if not Path(file).exists():
-            issues.append(f"NVIDIA integration file missing: {file}")
-
     # Check for environment configuration
     env_files = ["variables.env", ".env", "deploy/environments/production.env"]
-    env_configured = False
-    for env_file in env_files:
-        if Path(env_file).exists():
-            env_configured = True
-            break
+    env_configured = any(Path(env_file).exists() for env_file in env_files)
     if not env_configured:
         issues.append("No environment configuration files found")
 
-    # Check for security module
+    # Content checks for security module
     security_file = Path("src/tutorial_app/common/security.py")
-    if not security_file.exists():
-        issues.append("Security module not found")
-    else:
-        # Basic check that security features are implemented
-        with open(security_file, "r") as f:
+    if security_file.exists():
+        with open(security_file, "r", encoding="utf-8") as f:
             content = f.read()
             if "InputSanitizer" not in content:
                 issues.append("InputSanitizer class not found in security module")
             if "initialize_security" not in content:
                 issues.append("initialize_security function not found")
 
-    # Check for documentation
-    docs = ["docs/DEVELOPER_GUIDE.md", "docs/API_REFERENCE.md", "README.md"]
-    for doc in docs:
-        if not Path(doc).exists():
-            issues.append(f"Documentation file missing: {doc}")
-
     if issues:
         raise testing.TestFail("Environment setup issues found:\n" + "\n".join(f"• {issue}" for issue in issues))
 
-    print("SUCCESS: NVIDIA AI Workbench environment setup verified successfully!")
+    sys.stdout.write("SUCCESS: NVIDIA AI Workbench environment setup verified successfully!\n")
 
 
 def check_nvidia_integration():
@@ -97,7 +84,7 @@ def check_nvidia_integration():
     required_vars = ["NVWB_API", "SECRET_KEY"]
     env_file = Path("variables.env")
     if env_file.exists():
-        with open(env_file, "r") as f:
+        with open(env_file, "r", encoding="utf-8") as f:
             content = f.read()
             for var in required_vars:
                 if var not in content:
@@ -125,7 +112,7 @@ def check_nvidia_integration():
     if issues:
         raise testing.TestFail("NVIDIA integration issues found:\n" + "\n".join(f"• {issue}" for issue in issues))
 
-    print("SUCCESS: NVIDIA integration verified successfully!")
+    sys.stdout.write("SUCCESS: NVIDIA integration verified successfully!\n")
 
 
 def check_development_workflow():
@@ -153,6 +140,7 @@ def check_development_workflow():
             capture_output=True,
             text=True,
             timeout=10,
+            check=False,
         )
         if result.returncode != 0:
             issues.append("Streamlit not properly installed or accessible")
@@ -162,7 +150,7 @@ def check_development_workflow():
     if issues:
         raise testing.TestFail("Development workflow issues found:\n" + "\n".join(f"• {issue}" for issue in issues))
 
-    print("SUCCESS: Development workflow verified successfully!")
+    sys.stdout.write("SUCCESS: Development workflow verified successfully!\n")
 
 
 if __name__ == "__main__":
