@@ -7,6 +7,10 @@ streamlit-autorefresh==1.0.1
 streamlit-extras==0.5.5
 streamlit==1.41.1
 requests
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+redis>=4.0.0
+httpx>=0.24.0
 
 # Development dependencies (install with: pip install -r requirements.txt --editable)
 # Testing
