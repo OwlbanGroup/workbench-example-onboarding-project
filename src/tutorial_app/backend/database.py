@@ -2,7 +2,7 @@
 
 import os
 from typing import Optional
-import redis
+import redis  # pylint: disable=import-error
 
 
 def get_redis_client() -> redis.Redis:
