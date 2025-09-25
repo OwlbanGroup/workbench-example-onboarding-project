@@ -1,0 +1,220 @@
+# header data
+title: NVIDIA AI Workbench Tutorial - Team Onboarding
+waiting_msg: Click `Next` to continue.
+testing_msg: Complete the task to proceed!
+next: Next
+
+header: "Welcome to NVIDIA AI Workbench"
+
+welcome_msg: |
+  #### Welcome to NVIDIA AI Workbench Tutorial
+
+  This comprehensive onboarding module is designed to help new team members get started with NVIDIA AI Workbench. Follow the structured tasks below to complete your integration into NVIDIA's development environment and become proficient with enterprise-grade AI development practices.
+
+tasks:
+
+  - name: Introduction to NVIDIA AI Workbench
+    msg: |
+      ###### About NVIDIA AI Workbench
+      NVIDIA AI Workbench is a comprehensive development environment for AI/ML projects that streamlines the entire development lifecycle. This tutorial will guide you through:
+
+      **🎯 Key Capabilities:**
+      - **Unified Development Environment**: Integrated tools for AI/ML development
+      - **GPU Acceleration**: Seamless access to NVIDIA GPU resources
+      - **Pre-configured Environments**: Ready-to-use setups for popular frameworks
+      - **Enterprise Security**: Built-in security, compliance, and audit features
+      - **Team Collaboration**: Multi-user project sharing and version control
+
+      **🏢 Enterprise Benefits:**
+      - Standardized development workflows across teams
+      - Accelerated time-to-market for AI solutions
+      - Cost-effective GPU resource utilization
+      - Compliance with enterprise security standards
+      - Seamless integration with NVIDIA's AI ecosystem
+
+      **📚 Learning Objectives:**
+      - Master NVIDIA AI Workbench fundamentals
+      - Understand enterprise development best practices
+      - Learn security and compliance requirements
+      - Gain proficiency in deployment and monitoring
+
+    response: Ready to begin NVIDIA AI Workbench onboarding.
+
+  - name: Set Up Your NVIDIA Development Environment
+    msg: |
+      ###### Environment Configuration
+      Ensure your NVIDIA AI Workbench environment is properly configured:
+
+      **🔧 Prerequisites:**
+      - NVIDIA AI Workbench desktop application installed
+      - Python 3.8+ (automatically included)
+      - Git for version control and collaboration
+      - Access to NVIDIA GPU resources (if available)
+
+      **📥 Installation & Setup:**
+      1. **Download AI Workbench**: Visit [nvidia.com/ai-workbench](https://www.nvidia.com/en-us/deep-learning-ai/solutions/data-science/workbench/)
+      2. **Install the Application**: Follow platform-specific installation guides
+      3. **Import This Project**: Use the "Import Project" feature in AI Workbench
+      4. **Run Setup Script**:
+         ```bash
+         # Windows
+         setup_nvidia_integration.bat
+
+         # Linux/macOS
+         chmod +x setup_nvidia_integration.sh
+         ./setup_nvidia_integration.sh
+         ```
+
+      **✅ Verification Steps:**
+      - Confirm AI Workbench desktop app opens successfully
+      - Verify project import completed without errors
+      - Check that all dependencies installed correctly
+      - Test basic functionality (create a simple notebook)
+
+      **🔐 Security Note**: The setup includes enterprise-grade security configurations including input validation, rate limiting, and audit logging.
+
+    response: NVIDIA development environment configured successfully.
+    test: check_environment_setup
+
+  - name: Join NVIDIA Developer Ecosystem
+    msg: |
+      ###### Community & Resource Integration
+      Connect with NVIDIA's extensive developer ecosystem and resources:
+
+      **🌐 Official Channels:**
+      - **NVIDIA Developer Forums**: [forums.developer.nvidia.com](https://forums.developer.nvidia.com) - Get help from community experts
+      - **NVIDIA AI Workbench Documentation**: [docs.nvidia.com/ai-workbench](https://docs.nvidia.com/ai-workbench) - Comprehensive guides
+      - **NVIDIA Developer Program**: [developer.nvidia.com](https://developer.nvidia.com) - Join the developer community
+      - **GitHub**: Follow [NVIDIA](https://github.com/NVIDIA) repositories and contribute
+
+      **🎓 Learning Resources:**
+      - **NVIDIA Deep Learning Institute**: Free courses on AI/ML topics
+      - **NVIDIA GTC**: Annual conference with technical sessions
+      - **NVIDIA NGC**: GPU-optimized containers and models
+      - **Technical Blog**: Latest updates and best practices
+
+      **💬 Communication & Support:**
+      - **Enterprise Support**: Contact NVIDIA enterprise support for assistance
+      - **Community Slack**: Join NVIDIA developer communities and working groups
+      - **Office Hours**: Regular Q&A sessions with NVIDIA engineers
+      - **Certification Programs**: NVIDIA-certified professional tracks
+
+      **📖 Getting Started:**
+      1. Create accounts on key NVIDIA platforms
+      2. Join relevant forums and communities
+      3. Subscribe to NVIDIA newsletters and updates
+      4. Explore the NGC catalog for pre-trained models
+
+    response: Connected to NVIDIA developer ecosystem.
+
+  - name: Master Development Workflow
+    msg: |
+      ###### Development Best Practices
+      Learn NVIDIA's recommended development workflow and best practices:
+
+      **🏗️ Project Structure:**
+      - Review `docs/ARCHITECTURE_DECISIONS.md` for design principles
+      - Understand the modular architecture with `src/`, `app/`, and `code/` directories
+      - Familiarize yourself with the security module in `src/tutorial_app/common/security.py`
+
+      **🧪 Quality Assurance:**
+      - Run the comprehensive test suite: `python run_all_tests.py`
+      - Use automated linting and formatting: `black`, `isort`, `flake8`
+      - Implement type checking with `mypy`
+      - Security scanning with `bandit` and `safety`
+
+      **🚀 Deployment Pipeline:**
+      - **Local Development**: Use `docker-compose up -d` for testing
+      - **Staging**: Deploy to staging environment for integration testing
+      - **Production**: Use Kubernetes manifests in `deploy/kubernetes/`
+      - **Monitoring**: Prometheus/Grafana dashboards for observability
+
+      **🔒 Security Standards:**
+      - All inputs are sanitized and validated
+      - API calls are rate-limited (100 requests/minute)
+      - Audit logging captures all security events
+      - Secrets are properly managed and encrypted
+
+      **📊 Performance Optimization:**
+      - Redis caching for expensive operations
+      - Lazy loading for heavy components
+      - Connection pooling for external services
+      - GPU resource optimization
+
+    response: Development workflow mastered.
+
+  - name: Complete Enterprise Integration
+    msg: |
+      ###### Enterprise-Ready Deployment
+      Finalize your integration with enterprise systems and best practices:
+
+      **🏢 Enterprise Features:**
+      - **Authentication**: Integration with enterprise identity providers
+      - **Authorization**: Role-based access control for projects and resources
+      - **Audit Compliance**: Comprehensive logging and monitoring
+      - **Scalability**: Auto-scaling based on workload demands
+
+      **🔗 API Integration:**
+      - Connect to NVIDIA's internal APIs and services
+      - Utilize GraphQL API for project and environment data
+      - Integrate with enterprise monitoring and alerting systems
+      - Leverage NVIDIA's AI model registry and deployment tools
+
+      **📈 Advanced Capabilities:**
+      - **Multi-GPU Training**: Distributed training across multiple GPUs
+      - **Model Optimization**: TensorRT and NVIDIA Triton for inference
+      - **Edge Deployment**: Deploy models to edge devices and IoT
+      - **MLOps Integration**: CI/CD pipelines for ML model lifecycle
+
+      **🎯 Next Steps:**
+      1. Complete the full tutorial series (Basic → Advanced)
+      2. Contribute to NVIDIA open source projects
+      3. Participate in NVIDIA GTC and technical conferences
+      4. Pursue NVIDIA certifications and specializations
+      5. Join NVIDIA's AI innovation initiatives
+
+      **🏆 Achievement Unlocked:** You are now fully onboarded to NVIDIA AI Workbench and ready to contribute to enterprise AI projects!
+
+    response: Enterprise integration complete!
+
+# footer data
+closing_msg: |
+  ##### 🎉 Congratulations! NVIDIA AI Workbench Onboarding Complete
+
+  You have successfully completed the comprehensive NVIDIA AI Workbench onboarding program. You now have the knowledge and tools to:
+
+  - ✅ Develop AI/ML solutions using NVIDIA AI Workbench
+  - ✅ Follow enterprise security and compliance standards
+  - ✅ Deploy production-ready applications at scale
+  - ✅ Contribute to NVIDIA's AI ecosystem and initiatives
+
+  **Welcome to the NVIDIA developer community!** 🚀
+
+  *Continue exploring the tutorial for advanced topics, or start building your first AI project with NVIDIA AI Workbench.*
+
+# testing messages
+info_wait_for_project: "Waiting for the project to be properly imported."
+info_build_ready: ~
+info_build_needed: "It looks like your project needs you to start a new build."
+info_build_running: "Your project's build is currently running."
+info_build_error: "Uh oh! There was an error building your project."
+info_container_not_running: ~
+info_container_running: ~
+info_container_paused: "The container has been manually paused."
+info_container_dead: "Uh oh! The container does not seem healthy."
+info_app_is_running: ~
+info_app_not_running: "Waiting for you to start the application."
+info_app_starting: "The application is starting up!"
+info_compose_is_running: "Docker Compose is running."
+info_compose_not_running: "Start Docker Compose from the environment tab."
+info_compose_starting: "Docker Compose is starting."
+info_compose_error: "Uh oh! Docker Compose had an error."
+info_wait_for_package: "Waiting for you to configure the necessary package."
+info_wait_for_file: "Waiting for you to create the requested file."
+
+# custom testing messages
+info_wait_0: Initializing NVIDIA environment...
+info_wait_1: Configuring security settings...
+info_wait_2: Setting up development tools...
+info_wait_3: Connecting to NVIDIA services...
+info_wait_4: Finalizing integration...

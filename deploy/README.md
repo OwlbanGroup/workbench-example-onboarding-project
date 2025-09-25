@@ -220,6 +220,36 @@ The CI/CD pipeline includes:
 
 ### Manual Deployment
 
+#### Production Deployment Scripts
+
+**Windows:**
+```batch
+# Basic production deployment
+deploy\scripts\deploy_production.bat
+
+# With Kubernetes deployment
+set DEPLOY_KUBERNETES=true
+deploy\scripts\deploy_production.bat
+
+# With custom registry
+set REGISTRY=ghcr.io/myorg
+deploy\scripts\deploy_production.bat
+```
+
+**Linux:**
+```bash
+# Basic production deployment
+./deploy/scripts/deploy_production.sh
+
+# With Kubernetes deployment
+./deploy/scripts/deploy_production.sh --kubernetes
+
+# With custom registry and namespace
+./deploy/scripts/deploy_production.sh --registry ghcr.io/myorg --namespace tutorial-prod
+```
+
+#### Legacy Deployment Script
+
 ```bash
 # Deploy to specific environment
 ./deploy/scripts/deploy.sh production tutorial-prod

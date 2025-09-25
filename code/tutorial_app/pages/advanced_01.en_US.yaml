@@ -1,0 +1,95 @@
+# header data
+title: Remote Locations
+welcome_msg: |
+  Now that you have a good understanding of where things are in AI Workbench and the basics on how to work in it, let's move on to some more advanced exercises. These are typically workflows that are not necessarily required, but can greatly elevate your AI Workbench experience. 
+
+  Unlike the Basic exercises which are structured chronologically, these advanced exercises serve as a collection of quickstarts for you to pick and choose from. If one exercise does not pertain to you, feel free to skip it!
+
+  In this exercise, we will learn how to connect a remote location to your local AI Workbench. You can always work locally, but connecting and working in a remote system can greatly improve flexibility and portability of your AI projects. 
+
+  For this excercise, you will need a remote Ubuntu system. Versions 22.04 and 24.04 are officially supported.
+header_onetime: Prepare the Remote Machine
+header_everytime: Connecting a Remote Location
+
+# general strings
+waiting_msg: Let me know when you are ready.
+testing_msg: Waiting task to complete.
+next: Next
+
+# task script
+tasks_onetime:
+  - name: Setup Passwordless SSH Authentication
+    msg: |
+      AI Workbench uses SSH as the underlying communication protocol to ensure secure and reliable connections. For authentication, Workbench requires SSH Keys. You may already have these setup, if so, skip this first step. 
+
+
+
+      1. First, you will need an SSH key to communicate with your desired system. Generate one in a terminal window using the following commands. 
+
+        In Mac or Linux:
+        ```bash
+        ssh-keygen -f "~/.ssh/id_rsa" -t rsa -N ""
+        ssh-copy-id <remote-user>@<remote-machine>
+        ```
+
+        In Windows PowerShell: 
+        ```powershell
+        ssh-keygen -f "~\\.ssh\\id_rsa" -t rsa -N '""'
+        type $env:USERPROFILE\.ssh\id_rsa.pub | ssh <remote-user>@<remote-machine> "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+        ```
+    response: |
+      This will generate private and public keys at `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub` respectively. The public key is then installed on the remote machine for the specified remote user. 
+
+      In a terminal window, ssh into your remote system: `ssh <remote-user>@<remote-machine>`. If you can reach it, congrats! 
+
+  - name: Install AI Workbench on remote
+    msg: |
+      In order for AI Workbench to communicate across systems, it will need to speak to an AI Workbench Server on each of the remote systems you are connected to. This means you will need to install AI Workbench on your remote systems. 
+
+      To quickly install, copy and past the following commands into your SSH session.
+
+      ```
+      mkdir -p $HOME/.nvwb/bin && \
+      curl -L https://workbench.download.nvidia.com/stable/workbench-cli/$(curl -L -s https://workbench.download.nvidia.com/stable/workbench-cli/LATEST)/nvwb-cli-$(uname)-$(uname -m) --output $HOME/.nvwb/bin/nvwb-cli && \
+      chmod +x $HOME/.nvwb/bin/nvwb-cli && \
+      sudo -E $HOME/.nvwb/bin/nvwb-cli install
+      ```
+
+      Walk through the text-based UI to complete the remote installation. 
+    response: You now have all the right components to add your own instance as a remote location in your AI Workbench. We have just completed the **one-time** setup process for prepping an instance for AI Workbench. Now, it's time to add it.
+
+
+tasks_everytime:
+  - name: Add the new location
+    msg: |
+      On the locations landing page of AI Workbench, select **Add Location** on the top right corner of the window. 
+
+      Fill out the following form: 
+
+      * Name: select a name for your new location.
+      * Description: select a description for your location, eg. ``2x A6000s``
+      * Hostname or IP Address: address of the remote instance
+      * SSH Port: the default port is 22
+      * SSH Username: username of the **remote** instance
+      * SSH Key File: Browse your directory for the **private** SSH key file
+      * Workbench Directory: The location of ``.nvwb`` on your remote; typically, accept the default
+    response: If all goes well, the location should now be added onto your Locations landing page. There are now two locations that you can select in the Desktop App. 
+
+  - name: Click into the newly added location
+    msg: |
+      You can now choose to compute in any one of the two locations that are now on your AI Workbench. Let's click into the newly-added Location to compute in it. 
+    response: |
+      You are now in the remote Location! Any projects you create here will live on the remote instance, and any computation you do will utilize the GPU and/or resources on this system you just added. 
+
+      Note, you can also access the instance by activating it in the CLI. Run ``nvwb activate <my-instance-name>``. Similar to the Desktop app, once active, any ``nvwb`` command will now access and control the AI Workbench service on the remote Location. 
+
+  - name: Delete the Remote location
+    msg: |
+      Whenever you are done computing in your remote location, you are able to delete the location from your AI Workbench. Click the hamburger menu beside the location and select Delete. 
+    response: |
+      You now understand how to add any remote Ubuntu 22.04 or 24.04 instance to your AI Workbench to work in whenever you need any additional GPU resources. AI Workbench enables seamless project environment management and portability across all the different systems you may work in. 
+
+      **Note:** To add this instance back, repeat the steps here.
+
+# footer data
+closing_msg: "Congratulations! You have finished this exercise where we practiced adding remote work locations to workbench."

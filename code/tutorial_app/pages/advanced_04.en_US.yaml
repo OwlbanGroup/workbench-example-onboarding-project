@@ -1,0 +1,78 @@
+# header data
+title: Cloud Locations with Brev
+welcome_msg: |
+  Don't have another instance to connect to? Walk through an example of adding a Brev instance in the cloud!
+
+  Brev simplifies the process of finding the resources you need across any cloud. AI Workbench + Brev allows you to rent hardware, transfer your work, and bring your results back.
+header: Connect Workbench to Brev
+
+# general strings
+waiting_msg: Let me know when you are ready.
+testing_msg: Waiting task to complete.
+next: Next
+
+# task script
+tasks: 
+  - name: Create an instance on Brev
+    msg: |
+      Let's first create an instance we can use to add to our local AI Workbench. Navigate to the [Brev console](https://brev.nvidia.com/). You may need to login or create a free account.
+
+      Select **Deploy an Instance** > **VM Mode (disable Preinstall Jupyter)**. This should take you to the selection panel. 
+
+      Select a GPU of choice, for example, **NVIDIA A10**. Name the instance and deploy. Be patient, as it may take a few moments for the instance to start. 
+    response: Congrats, you now have your own GPU instance to work in!
+
+  - name: Open CLI and list contexts
+    msg: |
+      Great, now we can start connecting this instance to AI Workbench. This is a great opportunity to learn more about the AI Workbench Command Line Interface (CLI) tool. In additional to the Desktop App, this CLI tool can also be used to work and interact with AI Workbench. 
+    
+      The workbench CLI is installed on your machine when installing AI Workbench. Simply open a terminal window. 
+    
+      > **NOTE:** On Windows, you need to work from inside the Workbench WSL Distro. You can access that with the following command:
+      > `wsl -d NVIDIA-Workbench`
+
+      Run the CLI command to view all locations in your AI Workbench. 
+
+      ```
+      nvwb list contexts
+      ```
+    response: You should be able to see that the only location you have connected so far is the ``local`` location. This means you can currently only compute on the resources local to your current system. 
+
+  - name: Add the Brev instance as a context
+    msg: |
+      Now, let's add the Brev instance you just created in AI Workbench so you can enter and work on those GPU resources moving forward! 
+
+      Run the following commands in your terminal (in the WSL Distro if working in Windows): 
+
+          brev login
+          brev set <org-name>
+          nvwb create context --brev-instance-name <my-brev-instance>
+    response: |
+      If all went well, the Brev instance should now be added as a remote location in AI Workbench. You can verify this by running 
+
+        nvwb list contexts
+
+  - name: Navigate to Home in Desktop App
+    msg: |
+      Now, let's enter the location in the Desktop App and start working on it. In the Desktop App, navigate back to the home page. There should be a home icon on the top of the window. 
+    response: Do you see something different now? There are now two locations that you can select in the Desktop App. 
+
+  - name: Click into the new Brev location
+    msg: |
+      You can now choose to compute in any one of the two locations that are now on your AI Workbench. Let's click into the new Brev instance to compute in it. 
+    response: |
+      You are now in the Brev remote instance! Any projects you create here will live on the remote instance, and any computation you do will utilize the GPU on this system you just created. 
+
+      Note, you can also access the instance by activating it in the CLI. Run ``nvwb activate brev-<my-brev-instance>``. Similar to the Desktop app, once active, any ``nvwb`` command will now access and control the AI Workbench service on the remote Brev instance. 
+
+  - name: Delete the Brev location
+    msg: |
+      Whenever you are done computing in your remote location, or if you shut down the location on the Brev console, you are able to delete the location from your AI Workbench. Click the hamburger menu beside the location and select Delete. 
+    response: |
+      You now understand how to add a remote Brev instance to your AI Workbench to work in whenever you need any additional GPU resources. If you have no other system, Brev is a great way to get on-demand compute and integration with AI Workbench enables seamless project environment management and portability across different systems. 
+
+
+# footer data
+closing_msg: "Congratulations! You have finished this exercise where we practiced adding remote work locations to workbench."
+
+# testing messages

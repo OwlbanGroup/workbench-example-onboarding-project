@@ -1,0 +1,106 @@
+# header data
+title: Managing Custom Applications
+welcome_msg: |
+  Remember, these advanced exercises serve as a collection of quickstarts for you to pick and choose from. If one exercise does not pertain to you, feel free to skip it!
+
+  In this exercise, we will build a sample Gradio app and learn how to add it to an AI Workbench project. The default applications may be great for simple development work, but custom applications like frontend UIs, dashboards, etc. can greatly elevate your AI projects.
+header: Adding a Custom Application
+
+# general strings
+waiting_msg: Let me know when you are ready.
+testing_msg: Waiting task to complete.
+next: Next
+
+# task script
+tasks:
+  - name: Create a new project
+    msg: |
+      Start off by creating a new project to work in. Name it `custom-application-project` and use the Python Basice base environment.
+    response: Great! Let's continue.
+    test: create_project
+
+  - name: Setup your environment
+    msg: |
+      For this application, we are going to need the `gradio` Python package to be installed. Configure that in the AI Workbench UI.
+    response: Good job. Now Gradio is ready to use.
+    test: package_setup
+
+  - name: Create your web app
+    msg: |
+      Launch the existing JupyterLab application. We will use that as our IDE for developing our Gradio application. 
+
+      Create a new file in the `code` directory named `gradio-hello-world.py` and open it in the editor.
+
+      Inside of that file, drop in the following sample code:
+
+      ```python
+      import gradio as gr
+      import os
+
+      def greet(name, intensity):
+          return "Hello, " + name + "!" * int(intensity)
+
+      demo = gr.Interface(
+          fn=greet,
+          inputs=["text", "slider"],
+          outputs=["text"],
+      )
+
+      proxy_prefix = os.environ.get("PROXY_PREFIX")
+      demo.launch(server_name="0.0.0.0", server_port=8080, root_path=proxy_prefix)
+      ```
+
+      > **NOTE:** Take a look at how `PROXY_PREFIX` is handled. Workbench will set this environment variable at run time to communicate the proxy configuration.
+    response: "Nice job. Now we can tell Workbench how to run this application."
+    test: create_web_app
+
+  - name: Add your web app to AI Workbench
+    msg: |
+      Now, we are ready to add our code as an application handled by AI Workbench. In the AI Workbench window, select Add Application in the Apps section of the `Project Container` tab and click `Create a custom app`.
+
+      * Name — `simple-gradio`
+      * Class — Web Application
+      * Icon URL — Leave blank
+      * Start Command — ``cd /project/code && PROXY_PREFIX=$PROXY_PREFIX python3 gradio-hello-world.py``
+      * Health Check Command — ``curl -f "http://localhost:8080/"``
+      * Stop Command — ``pkill -f '^python3 gradio-hello-world.py'``
+      * Timeout - Leave at default 60 seconds
+      * Auto Launch — Select the checkbox to enable
+      * Port — ``8080``
+      * URL — ``http://localhost:8080/``
+      * URL Command — Leave blank
+      * User Message — Leave blank
+    response: "Excellent! Now, anyone that uses your project will have instant access to this app."
+    test: wait_for_custom_app
+
+  - name: Start your application
+    msg: |
+      Now, let's open the newly-added application. In AI Workbench, navigate to `Project Container > Applications`.
+
+      In the Applications pane toggle the switch on the simple-gradio application to launch it.
+    response: In this way, you can add custom tooling to your project and share it with others!
+    test: wait_for_custom_app_start
+
+
+# footer data
+closing_msg: "**Congratulations! You have finished this exercise!**"
+
+# testing messages
+info_wait_for_project: "Waiting for the project to exist."
+info_build_ready: ~
+info_build_needed: "It looks like your project needs you to start a new build. Please do that in the environment tab."
+info_build_running: "Your project's build is currently running."
+info_buid_error: "Uh oh! There was an error building your project. Please check the logs."
+info_container_not_running: ~
+info_container_running: ~
+info_container_paused: "The container has been manually paused."
+info_container_dead: "Uh oh! The container does not seem healthy. Please check the Workbench logs."
+info_wait_for_app: "Waiting for the application to exist."
+info_app_is_running: ~
+info_app_not_running: "Waiting for you to start the application."
+info_app_starting: "The application is starting up! Just a few more seconds."
+info_wait_for_package: "Waiting for you to configure the necessary package."
+info_wait_for_file: "Waiting for you to create the requested file."
+
+# custom testing messages
+info_wait_for_code: "Paste in the code as shown and save."

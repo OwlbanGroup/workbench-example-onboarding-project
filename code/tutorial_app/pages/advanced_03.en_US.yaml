@@ -1,0 +1,171 @@
+# header data
+title: Multi-Container Projects
+welcome_msg: |
+  In this exercise, we will learn how to work with multi-container projects via Compose. Working in a single container may be convenient for simple development work, but multi-container projects involving Compose services can can greatly improve the versatility of your AI projects and enable you to take your creations out of AI Workbench.
+
+  Today, we will work through an example of creating a simple flask application using a multi-container Compose project.
+header: Orchestrating Multiple Containers
+
+# general strings
+waiting_msg: Let me know when you are ready.
+testing_msg: Waiting for task to complete.
+next: Next
+
+# task script
+tasks: 
+  - name: Create a new project.
+    msg: |
+      Create a new project for this excercise, name it `multi-container-project`.
+
+      Select the `Python Basic` base container.
+
+      Then, create the project. Wait a few moments for it to finish building the project environment.
+    response: |
+      Looks like your project is ready!
+    test: create_project
+
+  - name: Setup your environment.
+    msg: |
+      For this application, we are going to need the `flask` and `redis` Python package to be installed. Configure that in the AI Workbench UI.
+    response: Those are now installed!
+    test: package_setup
+
+  - name: Create your web app
+    msg: |
+      Launch the existing JupyterLab application. We will use that as our IDE for developing our Flask application. 
+
+      Create a new file in the `code` directory named `app.py` and open it in the editor.
+
+      Inside of that file, drop in the following sample code:
+
+      ```python
+      import time
+
+      import redis
+      from flask import Flask
+
+      app = Flask(__name__)
+      cache = redis.Redis(host='redis', port=6379)
+
+      def get_hit_count():
+          retries = 5
+          while True:
+              try:
+                  return cache.incr('hits')
+              except redis.exceptions.ConnectionError as exc:
+                  if retries == 0:
+                      raise exc
+                  retries -= 1
+                  time.sleep(0.5)
+
+      @app.route('/')
+      def hello():
+          count = get_hit_count()
+          return f'Hello World! I have been seen {count} times.\n'
+      ```
+    response: "Your code looks like it is ready to go."
+    test: create_web_app
+
+  - name: Create a Dockerfile for your app
+    msg: |
+      Let's create a Dockerfile to wrap the code we just wrote. Navigate up one level to the root directory, and create a `Dockerfile` with the following contents:
+
+      ```Dockerfile
+      FROM python:3.10-alpine
+      WORKDIR /code
+      ENV FLASK_APP=code/app.py
+      ENV FLASK_RUN_HOST=0.0.0.0
+      RUN apk add --no-cache gcc musl-dev linux-headers
+      COPY requirements.txt requirements.txt
+      RUN pip install -r requirements.txt
+      EXPOSE 5000
+      COPY . .
+      CMD ["flask", "run", "--debug"]
+      ```
+
+      Save the file.
+    response:  |
+      The Dockerfile looks ready. 
+      So far, we have created a custom web app and written the Dockerfile for that app. 
+      To make our service complete, we now need to pair our application with a database. 
+      That's where Docker Compose comes into play.
+    test: create_dockerfile
+
+  - name: Create a Docker Compose file
+    msg: |
+      In the same top level directory, create a new file called `docker-compose.yaml` with the following contents:
+
+      ```
+      services:
+        web:
+          build: .
+          ports:
+            - "8000:5000"
+        redis:
+          image: "redis:alpine"
+        ```
+    response: "Perfect! Now we are ready to run our multi-container application."
+    test: create_docker_compose
+
+  - name: Start the containers with Compose
+    msg: |
+      In the AI Workbench window, navigate to the **Compose** section under the **Environment** category.
+
+      AI Workbench should already detect the ``docker-compose.yaml`` we built. If not, give it a refresh ([CTRL] + r).
+
+      Select Start.
+    response: The containers should be pulling, building, and spinning up. Track progress in the logs. Select Output from the bottom left corner of the AI Workbench window and select Compose from the dropdown.
+    test: wait_for_docker_compose_start
+
+  - name: Test your application
+    msg: |
+      Once the containers are running, view the application by navigating to `localhost:8000` in your browser. Interact with the app. Have fun, you built it!
+
+      We can see that the app is multi-container via the Compose file. You can verify with a ``docker ps -a`` in the terminal.
+
+      There is a frontend container containing the flask application frontend, as well as a redis database backend to store the number of times the app has been accessed.
+    response: "With Docker Compose, AI Workbench can orchestrate all manner of external dependencies."
+
+  - name: Shutdown multi-container workloads
+    msg: |
+      When you are ready, we can stop the Compose application. In the **Compose** section under the **Environment** category, click **Stop** in the top left corner to shut down the containers. You can also accomplish this from the **Compose** card in the **Project Dashboard**.
+
+      The containers should take a few moments to wind down. You can verify with a ``docker ps -a`` in a terminal window.
+    response: |
+      This has shutdown the extra containers used by our project, but not the project container. 
+    test: wait_for_docker_compose_stop
+
+
+# footer data
+closing_msg: |
+  Congratulations! You have completed this exercise.
+  You can now stop your project and remove it if you would like.
+
+  In this exercise, you learned how to:
+    - Containerize your AI Workbench application
+    - Orchestrate third party containers with AI Workbench and Docker Compose
+
+# testing messages
+# the helpers in the testing module may return one of these errors
+info_wait_for_project: "Waiting for the project to exist."
+info_build_ready: ~
+info_build_needed: "It looks like your project needs you to start a new build. Please do that in the environment tab."
+info_build_running: "Your project's build is currently running."
+info_buid_error: "Uh oh! There was an error building your project. Please check the logs."
+info_container_not_running: Your project container isn't running. Please start it.
+info_container_running: ~
+info_container_paused: "The container has been manually paused."
+info_container_dead: "Uh oh! The container does not seem healthy. Please check the Workbench logs."
+info_wait_for_app: "Waiting for the application to exist."
+info_app_is_running: ~
+info_app_not_running: "Waiting for you to start the application."
+info_app_starting: "The application is starting up! Just a few more seconds."
+info_compose_is_running: "Docker Compose is running."
+info_compose_not_running: "Start Docker Compose from the environment tab."
+info_compose_starting: "Docker Compose is starting. This can take a while the first time."
+info_compose_error: "Uh oh! Docker Compose had an error. Please check the logs."
+info_wait_for_package: "Waiting for you to configure the necessary package."
+info_wait_for_file: "Waiting for you to create the requested file."
+
+# custom testing messages
+info_wait_for_code: "Waiting for you to finish writing code."

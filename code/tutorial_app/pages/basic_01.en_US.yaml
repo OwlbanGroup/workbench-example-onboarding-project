@@ -1,0 +1,194 @@
+
+#header data
+title: Workbench Projects
+waiting_msg: Click `Next` to continue.
+testing_msg: Waiting for task to complete.
+next: Next
+
+header: "Basics 01: The Project Tab"
+
+welcome_msg: |
+  ##### A project is a Git repository with some metadata files that give Workbench information to:
+  - Version the development environment, including code, software and data
+  - Build, manage and run the container
+  - Configure, start and stop applications installed in the container
+  - Reserve and mount GPUs into the container
+  - Create and manage mounts and volumes for the container
+
+  ##### This exercise will show you the basics of the Project Tab:
+  - How to use the File Browser
+  - How to manage packages
+  - How to reserve GPUs
+  - How to discard changes
+
+
+
+tasks:
+  - name: Project Tab > Project Dashboard 
+    msg: |
+      ![dashboard](app/static/basic_01/dashboard.png)
+      ##### The Project Dashboard is an overview of the project with three sections.
+      - **Get Started** How to get going
+      - **Environment**: What's in it and what's currently running
+      - **Resources**: GPU status and local disk storage for the project
+
+      ###### Go to **Project Dashboard > Environment > Project Container** to see that this Tutorial App is `RUNNING`.
+
+
+  - name: Project Tab > File Browser > Create Folder
+    msg: |  
+      ##### The Project Tab has a file browser to access, manage and edit files. 
+      
+      * Click **File Browser** in the main menu bar on the left-side of **AI Workbench**.
+      * Click **Create Folder**, and name it `my-first-folder`.
+
+    response: |
+      ##### Great. You just created a folder in the project. 
+      
+      > **Note:** Normally you would have to do this through the command line, but Workbench provides a GUI for it.
+
+    test: check_folder_exists
+
+  - name: File Browser > Drag and Drop
+    msg: |  
+      ##### You can add files to the project directly through the File Browser.
+      * Click `my-first-folder`
+      * Drag and drop a file into the folder
+
+    response: |
+      ##### Awesome. You just added a file to the project.
+      
+      > **Note:** On your local system, you could have done this in multiple ways without Workbench.     
+      However, if the project were on a remote location, you would have had to transfer
+      the file through something like `scp`, or you could have used JupyterLab's file browser to upload the files.
+
+    test: check_file_in_folder
+
+
+  - name: File Browser > Option Dots > Delete 
+    msg: |
+      ##### The Option Dots (three vertical dots) are a common UI pattern in Workbench. 
+
+      For example, you can delete files in the the file browser through the option dots.
+
+      * Click the :open_file_folder: icon in the breadcrumbs at the top left of the file browser to go back to the root folder.
+      * Click the `code` folder in the top level of the project. You should see:
+        * The `tutorial_app` folder. It has the code for this app.
+        * The `example-file.txt` file.
+        * The `delete-me.txt` file.      
+      * Click the option dots on the right-side of the `delete-me.txt` file and select `Delete`.
+
+    response: |
+      ##### Awesome! You deleted the `delete-me.txt` file.
+
+    test: check_file_deleted
+
+  - name: File Browser > Option Dots > Edit
+    msg: |
+      ##### Files in the File Browser have actions besides Delete. 
+      
+      For example, **Edit** lets you view and edit a text file without a full editor. It's not a 
+      full-featured editor, but it's good for small edits.
+
+      * Click the option dots on the right-side of the `example-file.txt` file and select `Edit`.
+      * A bare bones file editor will open. Add some text like `Hello, World!` and click **Save**.
+
+    response: |
+      ##### Congratulations!. You edited the file. 
+
+      > **Note:** Again, you can do this multiple ways locally, but if the file were a remote location you would
+      need to open up JupyterLab or jump through some hoops in a terminal.
+
+    test: check_file_changed
+
+  - name: Environment > Project Container > Packages
+    msg: |
+      ##### Workbench lets you manage packages without using the command line. 
+
+      * Click **Environment > Project Container**
+      * Click **Packages** on the right-side menu to see installed packages. 
+      * Click *Add* and select `apt`
+      * Enter `jq` in the bar, click **Add** and then **Submit**
+
+      > **Note:** Adding packages through the UI also makes sure they are *versioned*. 
+
+    response: |
+      ##### Nice. You added the package to the project. 
+
+      > **Note:** If the package is still installing, you should see some messaging in the very bottom of the Project Tab in the status bar.
+
+    test: add_ubuntu_package
+
+  - name: Environment > Project Container > Hardware
+    msg: |
+      ##### Workbench manages the reservation and allocation of GPUs for the project. 
+
+      It does this at a fairly deep level, but on a project by project basis the
+      user experience is simple. 
+      
+      You just go to the appropriate section and indicate how many GPUs
+      you want allocated to the project.
+      
+      
+      * Go to **Environment > Project Container > Hardware**
+      * The count should say **0**.
+      * Change it to **1**.
+
+
+    response: |
+      ##### Nice. You now know how to reserve a GPU for the project. 
+
+      > **Note:** You can't *actually* access a GPU with this project because it doesn't have CUDA installed. You
+      also may not have a local GPU. 
+
+    test: ensure_gpu_count
+
+  - name: Git > Changes > Discard
+    msg: |
+      ##### Workbench uses Git to track changes and selectively discard them. 
+
+      Streamlined Git version control is a primary feature of Workbench, and it 
+      tracks the difference between the *current state* of a file and its *current version*.   
+
+      Seeing these differences on a file-by-file basis helps you decide whether to commit changes or stick with the current version of a file.
+
+      * Go to **Git > Changes** to see the changes you made in this exercise.
+      * The left pane lists the files and the change type: 
+         * `A` is *added*
+         * `M` is *modified*
+         * `D` is *deleted*
+      * Clicking an individual file shows the line by line changes in the right pane.
+      * You can resize the left and right panes by grabbing the divider between them and dragging it.
+
+      The **Option Dots** on each file let you decide on a file-by-file basis.
+      - **Discard changes** reverts the entire file to the versioned state.
+      - **Add to .gitignore** adds the file to the `.gitignore` file so that it won't be tracked by Git in the future.
+
+      Let's discard the changes all at once.
+
+      * Click the **Option Dots** on the top row of the left pane.
+      * Select **Discard changes**.
+
+# TODO: fix the actual logic here because it's not actually checking the changes are discarded. A commit will pass this test.
+
+    # response: | 
+    #   OK. All tracked files are now back to how they were before you made any changes. The package you installed, the file you deleted, and the file you edited
+    #   are all as they were before you touched them.
+
+    #   > **Note:** The changes are gone **permanently** because they were not commited.
+    
+    test: check_changes_discarded
+
+closing_msg: |
+  ##### Ok. That was a lightning tour of the Project Tab. We didn't cover everything, but hopefully you got the idea.
+  
+
+
+# testing messages
+info_wait_for_folder: "Waiting for you to create the folder my-first-folder..."
+info_wait_for_file_upload: "Waiting for you to upload a file to my-first-folder..."
+info_wait_for_delete: "Waiting for you to delete the file delete-me.txt..."
+info_wait_for_edit: "Waiting for you to edit the file example-file.txt..."
+info_wait_for_package: "Waiting for you to add the package jq..."
+info_no_gpu_assigned: "Waiting for you to allocate at least one GPU to the project..."
+info_check_changes_discarded: "Waiting for you to discard all changes to the project..."

@@ -1,0 +1,200 @@
+title: Using Git
+waiting_msg: Let me know when you are ready.
+testing_msg: Waiting for task to complete.
+next: Next
+
+header: "Basics 03: More Version Control"
+
+welcome_msg: |
+    ##### Connect your project to start working with GitHub.
+    
+    > **Note:** This exercise continues to focus on `my-first-project`, and assumes you've completed Basic Exercise 02.
+    > By the end you should be fairly comfortable with the basics of Workbench projects.
+
+    #### Tasks
+    In this exercise, you will learn how to:
+    - Connect the Desktop App to GitHub
+    - Work with Git branches
+    - Publish and pull changes from GitHub
+    - Delete a local repository once finished 
+
+    #### Prerequisites
+    - You should have a free [GitHub account](https://github.com/signup)
+    - You should be logged in to GitHub in your browser
+
+tasks:
+  - name: Connect Workbench to Your GitHub Account
+    msg: |
+      Workbench manages syncing local projects to GitHub or GitLab, but to enable this, you need to connect your GitHub account to Workbench.
+
+      This task uses an OAuth flow but you can also use a Personal Access Token (PAT).
+
+      > **Note:** Connecting Workbench to your account **does not** give NVIDIA any access. 
+      > 
+      > It only gives the Desktop App access to the basics needed to sync your projects. Learn more [here](https://docs.nvidia.com/ai-workbench/user-guide/latest/integrations/integrations.html#integrations-github). 
+
+      To connect your account, do the following:
+      - Click the **Settings** :gear: at the top of Workbench, and then click **Settings > Integrations**
+      - Click **Connect** on the GitHub card and use the default selection of `Sign in through GitHub`, click **Next** and then click **Sign In**.
+      - Verify when redirected to GitHub.
+      - Copy the 8-digit code displayed in Workbench and paste it into the GitHub verification page.
+      - Click **Authorize NVIDIA**
+      - You should see a message indicating that GitHub is connected.
+
+      ![code](app/static/basic_03/github-connect.png)
+    response: |
+      You can always revoke the access granted to the Desktop App by clicking **Disconnect**.
+
+
+
+  - name: Commit Changes for `my-first-project`
+    msg: |
+      Now that we are connected to GitHub, we need to commit our changes before publishing it to GitHub.
+      This is a repeat of a task in the previous exercise. 
+      - In `my-first-project`, go to **Project View > Git > Changes**
+      - You can see the various changes you made, including the package additions.
+      - They aren't yet part of the version history, so let's commit them.
+      - Click **Commit**
+      - If you see warnings relating to git file size, click to resolve them, and ignore all warnings.
+
+    response: |
+      You are ready to push these changes to GitHub.
+    test: wait_for_commit
+
+  - name: Publish to GitHub
+    msg: |
+      Your project is only saved locally at the moment.     
+      If you push it to GitHub, then you have a permanent copy and you can move it to other Workbench locations.
+      - Click **Publish** in the top action bar.
+      - Select GitHub as the Git server.
+      - Select the visibility option you want, and click **Publish**.
+
+    response: |
+      The GitHub connection allows the Desktop App to create a repository in your account and push 
+      this local project up to your account. 
+      **[Click here]({{ result }})** to see your published project on GitHub.
+    test: wait_for_publish
+
+  - name: Edit the Project on GitHub to Create Remote Changes (digression)
+    msg: |
+      If there are changes to the remote repository that you don't have yet locally, Workbench will detect them and notify you that you can pull them down.
+      
+      For example, if you are collaborating with someone that pushes changes to GitHub, then
+      you can pull those changes down to your local project.
+
+      You don't yet have a collaborator, so let's set this up artificially by editing the project directly on GitHub.
+
+      **Do the following in the GitHub web interface, not in Workbench.**
+
+      - Go to the `README.md` file in the project on GitHub and click the :pencil: icon to edit the file.
+      - Add a new line like `Hello README!` to the file and click **Commit** to save the changes. You will see a message on GitHub indicating that the changes have been committed.
+      - Then, go back to the project view. The **Publish** button should now say **Fetch** and show there are remote changes.
+      - If it **doesn't**, then click **Fetch** to manually fetch the info on the upstream changes. This **won't** make any changes to your local repository. It only prepares to make changes.
+
+    response: |
+      At this point you should see that you have some upstream changes pending. 
+    test: wait_for_remote_changes
+
+  - name: Pull Upstream Changes
+    msg: |
+      Since you already know what these changes are, you can click **Pull** to 
+      update your local repository to match the remote version.
+    response: |
+      This is a pretty simple version of what can be a complicated process if there are
+      conflicting changes between your local and remote repositories. 
+
+      This is a topic for a future exercise.
+    test: wait_for_remote_changes_sync
+
+  - name: Git > History
+    msg: |
+      The best way to verify you have the latest changes is to use **Git > History**.
+
+      This is an interactive view of the commit history, and it helps you comp
+
+      The fastest is to use **Git > History**.
+      - Click **Project View > Git > History**.
+      - You should see the latest commit with a message like "Updated README.md"
+      - You should also see the previous commit with a message like "Initial commit"
+    response: |
+      This is an interactive view of the commit history, and it helps you compare
+  - name: Create a Git Branch
+    msg: |
+      Workbench uses [Git branches](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) 
+      to let you change your code and environment without breaking something that is already working. 
+      
+      Let's do something simple to see how branching works.
+      - Open the branch menu by clicking **main** in the top left of the project view.
+      - Click **Create Branch** at the bottom of the dropdown.
+      - Name the branch `my-first-branch`.
+      - Click **Create Branch**.
+
+    response: |
+      You can make any changes you want in this branch because it is **isolated** from the **main** branch. 
+
+      This isolation extends to the environment because Workbench uses Git to version the environment.
+
+
+    test: wait_for_branch
+
+  - name: Remove `jq` from `my-first-branch`
+    msg: |
+      - Go to **Environment > Project Container > Packages** and find the `jq` package in the list
+      - Click the option dots and select **Remove Package**
+
+      This removes the `jq` package from the environment.
+      - `apt.txt` > **Edit**
+      - Delete `jq` from the file and **Save**.
+      - **Commit** the change.
+      - **Publish** this new branch to GitHub. 
+
+      You can verify that it's no longer installed if you stop the project container and start JupyterLab again.
+
+      Just rebuild the container, start JupyterLab again, and run `!jq --version` to get an error, proving it isn't installed.
+
+      > **Hint:** If you forgot just go back to the Working in Projects exercise and see the Rebuild the Environment section.
+
+
+    response: |
+      This kind of isolation is useful, and it's why you should typically make a *dev-branch* 
+      or *feature-branch* for all of your projects. It's best to be safe. 
+
+  - name: Delete the local project
+    msg: |
+      Now that we are done developing this project on this local machine, we can delete this project locally. 
+      Remember, our changes have already been published onto our Git server! You can delete this project from the Settings page of the project.
+
+      Go to the project Settings page and delete your local project.
+    response: |
+      Oh wait! Not yet! Ahh, too late. 
+
+      That's ok. Becuase we published this project to the remote Git server, we can clone it again to keep working.
+    test: wait_for_no_proj
+
+  - name: Clone the project
+    msg: |
+      You should be back at your location's home page (click the home tab at the top left if you are not). Now that you have a published project, if you ever want to bring that project down on this location again, all you have to do is simply **Clone Project** and drop in the Git URL. No need to start from scratch with a new project! 
+
+      This is great for diverse teams working on the same project, as AI Workbench leverages the power of Git to turn your projects portable, no matter where you want to work on them!
+      
+      Return to the homepage and clone your project using its HTTPS Git URL. 
+      
+      > *HINT:* You can find the URL using the link generated in *[Publish Project to Git Server](#publish-project-to-git-server)*.
+    response: |
+      And just like that, we are back to where we started. We can create a new branch, continue to write code, and commit and push that code back upstream. Easy peasy!
+    test: wait_for_proj
+
+closing_msg: |
+  **Congratulations! You have finished this exercise!**
+
+  In this excercise, we tracked code changes, shared our code, synchronized our code with remote changes, and finally pulled the code down.
+
+  You can delete the project again when you are ready.
+
+info_wait_for_commit: Waiting for you to commit all of your changes.
+info_wait_for_publish: Waiting for you to publish your repository.
+info_wait_for_remote_changes: Waiting for remote changes to be staged.
+info_wait_for_remote_changes_sync: Waiting for you to synchronize the remote changes.
+info_wait_for_branch: Waiting for you to create the new branch.
+info_wait_for_no_proj: Waiting for you to delete the local copy of your repo.
+info_wait_for_proj: Waiting for you to clone the project.

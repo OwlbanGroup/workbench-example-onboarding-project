@@ -1,0 +1,58 @@
+title: Settings
+waiting_msg: " "
+testing_msg: Waiting for task to complete.
+next: RESET ALL PROGRESS
+
+
+reset_progress_tasks: 
+  - name: Reset your progress
+    msg: |
+      ##### Use this section to reset the Tutorial back to its default. 
+      - You must delete the projects created during the tutorial,
+        for example `my-first-project`.
+      - The reset **will not happen** until you delete those projects. 
+      - Click the **RESET ALL PROGRESS** button to start the reset.
+    response: ~
+
+  - name: Remove all training projects
+    msg: |
+      ##### To reset the status, make sure to delete the following projects, if they exist:
+      - my-first-project
+      - custom-application-project
+      - multi-container-project
+      
+      If after resetting you still see tracked progress, got to the AI Workbench  File Browser view and delete file `data/scratch/tutorial_state.json`.
+
+    response: |
+      ##### All done! This page will refresh soon.
+    test: wait_for_clean
+
+bundle_header: Logs and Support Bundles
+bundle_msg: |
+  A **Support Bundle** is a collection of logs that capture the state of your AI Workbench. To create a support bundle to send in for troubleshooting, first open the AI Workbench CLI (use the WSL distro if on Windows)
+
+  Then, run the following command(s):
+
+  ```bash
+  nvwb support create-bundle
+  ```
+
+  or
+
+  ```bash
+  nvwb support create-bundle --context <location name>
+  ```
+
+  For a full description of relevant AI Workbench related logs, check out the documentation [here](https://docs.nvidia.com/ai-workbench/user-guide/latest/troubleshooting/logging.html)
+
+forum_header: NVIDIA Developer Forum
+forum_msg: |
+  Feel free to engage with other developers and NVIDIA personnel on the [NVIDIA Developer Forum](https://forums.developer.nvidia.com/c/ai-data-science/nvidia-ai-workbench/671) for AI Workbench!
+
+  Here, you can make your own post and get help debugging or troubleshooting your issues. Be sure to include any support bundles created so you get can quicker and more helpful responses.
+
+  Additionally, here you can engage with other developers and follow along with example projects as updates get pushed upstream. Happy coding!
+
+info_first_project: "Waiting for you to remove `my-first-project`."
+info_custom_app_proj: "Waiting for you to remove `custom-application-project`."
+info_multi_container_proj: "Waiting for you to remove `multi-container-project`."

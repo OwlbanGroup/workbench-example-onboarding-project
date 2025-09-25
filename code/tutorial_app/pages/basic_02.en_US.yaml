@@ -1,0 +1,259 @@
+# header data
+title: Creating a New Project
+welcome_msg: |
+  ##### The previous exercise went over the basics of the Project View. 
+
+  ##### Let's go deeper by creating a new project and working those features again. 
+
+header: "Basics 02: Creating a New Project"
+
+# general strings
+waiting_msg: Let me know when you are ready.
+testing_msg: ""
+next: Next
+
+# task script
+tasks:
+  - name: Location Home Page > Create Project
+    msg: |
+      ![local-home](app/static/basic_02/local-home.png) 
+
+      ##### You can create a new project with a few clicks.
+
+      - Go to the home page for the location (*local* in this case) and click **New Project**
+      - Fill in the dialog.
+        - **Name:** `my-first-project`
+        - **Description:** Leave empty
+        - **Path:** It's auto-populated so leave it as is.
+      - Click **Next** in the dialog
+      - Select **Python Basic** from the list of container images
+      - Click **Select**
+
+
+    response: |
+      ##### Nice job. 
+      
+      > **Note:** Creating a new project does a `git init` locally, adds the metadata files and starts building the base image for the environment.
+
+    test: create_a_brand_new_project
+
+  - name: Status Bar > Build Progress
+    msg: |
+      ##### The Project Tab has a status bar at the bottom showing various logs.
+    
+      You should see some messages flashing at the bottom of the project tab while the container is building. 
+
+      > **Hint:** Look in the bottom right and left corners to see affordances like **Output** and **Uploads**.
+
+      * Click the status bar to expand it and see the full build log.
+      * Toggle the **Auto scroll** on the right to stop it from scrolling.
+      * Click the **Double Up Arrow** icon :arrow_double_up: to expand the log.
+      * Enter some text into the *Find* bar to search the log.
+      * Click the **x** at the top right of the log widget to close it.
+
+    response: |
+      ##### Ok. Your development environment is ready to go. Let's open JupyterLab.
+
+      > **Note:** Containers can be large. This is especially true of 
+      containers built for working with GPUs. 
+      > 
+      > They can take a long time to build, and if your network is slow or your system
+      > doesn't have a lot of resources, it can take a **very** long time. 
+       
+    test: wait_for_project_build
+      
+
+  - name: Open JupyterLab
+    msg: |
+      ##### The most obvious way is the big green button that says **JupyterLab**. 
+      However, let's do it the hard way to give you a more experience with the Status Bar.
+
+      * Click the `0 apps running` in the far right-side of the bottom status bar.
+      * Click the toggle to start JupyterLab. It may take a second but will open in your browser.
+
+      > **Note**: The Desktop App should be in the Project Tab  for `my-first-project`, **not** for `nvidia-ai-workbench-onboarding`.
+
+    response: |
+      ##### Perfect! JupyterLab is now open in your browser.
+
+      > **Note:** There are two things to notice here. 
+      > - JupyterLab is running *inside* of the project container. It is not installed on your system. 
+      > - The url for the JupyterLab server says what project you are in. 
+
+    test: wait_for_jupyterlab_start
+
+  - name: Create a Notebook
+    msg: |
+      ##### JupyterLab will work just as you expect it to.
+      - In JupyterLab, go to the `/project/code` folder
+      - Create a new notebook
+      - Save it and make sure to name it `my-new-notebook.ipynb`
+
+    response: | 
+      ##### Notebook created and saved. You are ready to write some code!
+
+    test: create_a_new_notebook
+
+  - name: Paste Code in `my-new-notebook.ipynb`
+    msg: |
+      ##### Now we are going to paste some code into the notebook to setup the next exercise on adding packages to the container.
+      
+      - Copy the code below into the notebook and run it. 
+      - Then save the notebook.
+
+          ```
+          import plotly.graph_objects as go
+          import numpy as np
+          from numpy.lib.npyio import DataSource
+
+          # Download data set from plotly repo
+          pts = np.loadtxt(DataSource().open('https://raw.githubusercontent.com/plotly/datasets/master/mesh_dataset.txt'))
+          x, y, z = pts.T
+
+          fig = go.Figure(data=[go.Mesh3d(x=x, y=y, z=z, color='lightpink', opacity=0.50)])
+          fig.show()
+          ```
+      > **Note**: It will *definitely* fail because Plotly isn't installed in the container.
+    response: |
+      ##### Great. You ran the code and saved the notebook. It failed as expected. 
+
+    test: write_some_code
+
+  - name: Add Python Packages
+    msg: |
+      ##### Let's install `plotly` and `numpy` through the package manager.
+
+      - Go to **Environment > Project Container > Packages**
+      - Click **Add** in the top right of the section
+      - Select **pip** as the package manager
+      - Enter `plotly` as the package name and click **Add**
+      - Enter `numpy` as  the package name and click **Add**
+      - Click **Submit**
+
+    test: add_python_packages
+    response: |
+      ##### Plotly and Numpy have been installed. If you restart your Jupyter Kernel and rerun the cell, it should work.
+
+      > **Note:** Installing packages through the Desktop App does a few things.
+      >  - Workbench writes the package to  `requirements.txt`. Go to **Git > Changes** to see this. 
+      >  - If the container is running, Workbench installs the package into the running container.
+      >  - If it isn't running, Workbench will install the package the next time you start the container.
+
+  - name: Add `jq` to the `apt.txt` File
+    msg: |
+      ##### You can also add packages by editing the environment definition files. 
+      Workbench tracks the environment definition files and uses them for versioning and transparency.
+      - However, if you manually edit them the package won't be automatically installed in the container.
+      - Instead, it will be installed the next time the container rebuilds. 
+
+      ##### You can edit `apt.txt` in the file browser.
+      - Go to **Project View > File Browser**.
+      - Open `apt.txt` in the file editor,  add a new line with `jq` and save the file.
+      - Go to **Git > Changes** to see the addition.
+      - Go back to JupyterLab, open a terminal and run `jq --version`. 
+
+      > **Note**: This will fail because `jq` is not installed in the container yet.
+
+    response: |
+      ##### The package was added to the `apt.txt` file but isn't yet installed. 
+      > **Note**: Entering the package into `apt.txt` is **different** from installing via the Desktop App.
+      > - Installing through the Desktop App automatically installs it in the running container.
+      > - Entering it into `apt.txt` tells Workbench to install it the next time the container rebuilds.
+
+    test: add_ubuntu_package
+
+  - name: Rebuild the Container to Add `jq`
+    msg: |
+      ##### This is just a button click.
+      1. Go to **Environment > Project Container**
+      2. Click **Rebuild & Restart**
+      3. Wait for the rebuild to complete
+
+    response: |
+      ##### Your environment has been rebuilt with the new package. 
+      JupyterLab should start again when the rebuild completes.
+    test: rebuild_environment
+
+  - name: Test the Installed Package
+    msg: |
+      ##### JupyterLab should have started again. 
+      
+      If it didn't, then start it manually by clicking the green **JupyterLab** button.
+
+      Let's verify that `jq` is installed.
+      1. Open a terminal in JupyterLab
+      2. Run `jq --version`.
+
+    response: | 
+      ##### You should see the version number.
+
+    test: test_jq_installation
+
+  - name: (Warning) Avoid Installing Packages in the Notebook
+    msg: |
+      ##### We avoid the typical install in a notebook cell for a few reasons.
+      - `!apt install jq` will fail because the user in the container, `workbench`, does not have sudo access.
+      - `%pip install plotly` *will* work but won't persist across container rebuilds.
+
+      ##### This is a departure for people used to hosted notebook environments.
+
+      When running projects with Workbench, you need to install the packages using the Workbench application itself. This has some benefits.
+      - The packages will **persist** across container rebuilds, which means you don't need to install them every time you start the container.
+      - The packages will be **versioned**, which means you can see exactly what packages were installed and when.
+      - The packages are **managed**, which means you can uninstall them if you need to.
+    response: | 
+      ##### Install packages with the Desktop App or the environment definition files.
+
+      
+
+
+  - name: Close `my-first-project` to Shut the Container Down
+    msg: |
+      Remember that a project is more than just a Git repository. It's also a containerized environment that you may want to shutdown if you
+      aren't working in it anymore.
+      
+      You can do this in a few different ways, for example through **Environment > Project Container > Stop Container**, or through
+      **Project Dashboard > Project Container > Stop Container**.
+      
+      You can also just close out the project tab. To close your project:
+      * Click the X on the project tab in the top bar
+      * Verify that you want to shut down the applications and project container
+
+    response: |
+      ##### You stopped the project container. 
+      
+      All of your work is stil there, including the environment changes you made. 
+      
+      **However, they aren't yet commited to a version.**
+
+    test: wait_for_project_stop
+
+# footer data
+closing_msg: | 
+      ##### Congrats! You completed this exercise. 
+      You now have the basics for creating projects, managing dependencies, and running code in AI Workbench. 
+
+      ##### Now let's move to version control. 
+      
+
+
+# testing messages
+info_wait_for_project: "Waiting for you to create a project named my-first-project."
+info_build_ready: ~
+info_build_needed: "It looks like your project needs you to start a new build. Please do that in the environment tab."
+info_build_running: "Your project's build is currently running."
+info_buid_error: "Uh oh! There was an error building your project. Please check the logs."
+info_container_not_running: "Your project is not running. Please make sure to start it."
+info_container_running: "Your container is still running. Please stop it."
+info_container_paused: "The container has been manually paused."
+info_container_dead: "Uh oh! The container does not seem healthy. Please check the Workbench logs."
+info_wait_for_app: "It doesn't look like the JupyterLab applications exists. [Please use these directions](https://docs.nvidia.com/ai-workbench/user-guide/latest/applications/applications.html#built-in-apps) to add JupyterLab back into your project."
+info_app_is_running: "Your app is still running. Please stop it."
+info_app_not_running: "Waiting for you to start the JupyterLab application."
+info_app_starting: "JupyterLab is starting up! Just a few more seconds."
+info_wait_for_package: "Waiting for you to add package."
+info_wait_for_file: "Waiting for Jupyter Notebook to get created."
+
+# custom testing messages
+info_wait_for_code: "Waiting for you to paste the code in. Make sure to save when you are done."
+info_wait_for_project_stop: "Waiting for you to stop the project container."
