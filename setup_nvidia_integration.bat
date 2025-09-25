@@ -15,28 +15,20 @@ if not exist "pyproject.toml" (
 echo 📋 Gathering configuration information...
 
 REM NVIDIA Environment Configuration
-set /p NVWB_API="NVIDIA AI Workbench API URL [https://api.nvidia-workbench.internal]: "
-if "%NVWB_API%"=="" set NVWB_API=https://api.nvidia-workbench.internal
+set NVWB_API=https://api.nvidia-workbench.internal
 
-set /p PROXY_PREFIX="Reverse proxy prefix (e.g., /tutorial) [/tutorial]: "
-if "%PROXY_PREFIX%"=="" set PROXY_PREFIX=/tutorial
+set PROXY_PREFIX=/tutorial
 
-set /p SECRET_KEY="Application secret key [auto-generate]: "
+set SECRET_KEY=
 if "%SECRET_KEY%"=="" (
     REM Generate a random secret key using PowerShell
     for /f %%i in ('powershell -command "$bytes = New-Object Byte[] 32; (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes); [System.Convert]::ToHexString($bytes).ToLower()"') do set SECRET_KEY=%%i
 )
 
-set /p ALLOWED_DOMAINS="Allowed domains (comma-separated) [nvidia.com,developer.nvidia.com,forums.developer.nvidia.com]: "
-if "%ALLOWED_DOMAINS%"=="" set ALLOWED_DOMAINS=nvidia.com,developer.nvidia.com,forums.developer.nvidia.com
+set ALLOWED_DOMAINS=nvidia.com,developer.nvidia.com,forums.developer.nvidia.com
 
 REM Environment selection
-echo.
-echo 🌍 Select deployment environment:
-echo 1^) Development
-echo 2^) Staging
-echo 3^) Production
-set /p env_choice="Enter choice (1-3): "
+set env_choice=3
 
 if "%env_choice%"=="1" (
     set ENV_FILE=deploy\environments\development.env
