@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from .database import store_user_data, get_user_data, store_app_data, get_app_data
+from tutorial_app.backend.database import store_user_data, get_user_data, store_app_data, get_app_data
 
 app = FastAPI(title="Tutorial App Backend", version="1.0.0")
 

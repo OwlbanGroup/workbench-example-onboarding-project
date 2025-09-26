@@ -3,8 +3,8 @@
 import streamlit as st
 import httpx
 
-from .common.sidebar import APP_SIDEBAR
-from .common.middleware import setup_middleware
+from tutorial_app.common.sidebar import APP_SIDEBAR
+from tutorial_app.common.middleware import setup_middleware
 
 # Backend URL
 BACKEND_URL = "http://localhost:8000"

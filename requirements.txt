@@ -31,7 +31,7 @@ safety>=2.3.0
 pre-commit>=3.0.0
 
 # Type checking
-types-all>=1.0.0
+
 
 # Documentation
 mkdocs>=1.4.0

@@ -18,8 +18,8 @@ from pathlib import Path
 
 import streamlit as st  # type: ignore
 
-from common import localization, theme
-from pages import owlban_group_tests as TESTS
+from tutorial_app.common import localization, theme
+from tutorial_app.pages import owlban_group_tests as TESTS
 
 # Load NVIDIA-focused onboarding content
 MESSAGES = localization.load_messages(Path(__file__).parent / "owlban_group_nvidia.en_US.yaml")
