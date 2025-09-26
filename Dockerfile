@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 # Copy the application code
 COPY . .
 
+# Install the local package in editable mode
+RUN pip install -e .
+
 # Expose the port
 EXPOSE 8501
 

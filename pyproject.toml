@@ -1,3 +1,17 @@
+[project]
+name = "tutorial-app"
+version = "0.1.0"
+description = "Tutorial application"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 # Pylint Configuration
 [tool.pylint.MAIN]
 load-plugins = "pylint.extensions.bad_builtin"
