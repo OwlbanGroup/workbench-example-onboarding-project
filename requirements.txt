@@ -1,6 +1,7 @@
 # Core dependencies
 httpunixsocketconnection==1.0.1
 jupyterlab>3.0
+ipywidgets>=8.0.0
 pydantic-yaml==1.4.0
 pyyaml==6.0.1
 streamlit-autorefresh==1.0.1
