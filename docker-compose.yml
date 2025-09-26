@@ -14,6 +14,7 @@ services:
       - STREAMLIT_SERVER_ADDRESS=0.0.0.0
       - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
       - PROXY_PREFIX=${PROXY_PREFIX:-}
+    command: ["streamlit", "run", "src/tutorial_app/streamlit_app.py", "--server.headless", "true", "--server.port", "8501", "--server.address", "0.0.0.0"]
     volumes:
       - ./data:/app/data
       - ./models:/app/models
@@ -22,7 +23,7 @@ services:
       - tutorial-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8501/healthz"]
+      test: ["CMD", "curl", "-f", "http://localhost:8501"]
       interval: 30s
       timeout: 10s
       retries: 3
