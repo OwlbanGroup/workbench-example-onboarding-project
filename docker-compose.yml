@@ -117,10 +117,34 @@ services:
       - tutorial-network
     restart: unless-stopped
 
+  gitea:
+    image: gitea/gitea:latest
+    ports:
+      - "3001:3000"
+      - "2222:22"
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__database__PATH=/data/gitea/gitea.db
+      - GITEA__server__ROOT_URL=http://localhost:3001
+    volumes:
+      - gitea_data:/data
+    networks:
+      - tutorial-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
 volumes:
   redis_data:
   prometheus_data:
   grafana_data:
+  gitea_data:
 
 networks:
   tutorial-network:
