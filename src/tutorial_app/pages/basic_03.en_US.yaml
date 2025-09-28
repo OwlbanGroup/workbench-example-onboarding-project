@@ -184,6 +184,27 @@ tasks:
       And just like that, we are back to where we started. We can create a new branch, continue to write code, and commit and push that code back upstream. Easy peasy!
     test: wait_for_proj
 
+  - name: Use Local Gitea Server
+    msg: |
+      In this tutorial environment, a local Git server (Gitea) is available at http://localhost:3001 for offline version control without external services like GitHub.
+
+      To use Gitea:
+
+      - Visit http://localhost:3001 to complete initial setup if needed (default admin/admin, database SQLite at /data/gitea/gitea.db).
+
+      - Create a new repository in Gitea named "my-first-project-local".
+
+      - In your project, click **Publish**, select Gitea as Git server.
+
+      - Enter URL: http://gitea:3000/admin/my-first-project-local.git (internal Docker network) or http://localhost:3001/admin/my-first-project-local.git.
+
+      - Username: admin, Password: admin.
+
+      This allows publishing and cloning locally.
+    response: |
+      Gitea provides a self-hosted Git solution integrated with the Docker environment for development and testing.
+    test: wait_for_gitea
+
 closing_msg: |
   **Congratulations! You have finished this exercise!**
 
@@ -198,3 +219,4 @@ info_wait_for_remote_changes_sync: Waiting for you to synchronize the remote cha
 info_wait_for_branch: Waiting for you to create the new branch.
 info_wait_for_no_proj: Waiting for you to delete the local copy of your repo.
 info_wait_for_proj: Waiting for you to clone the project.
+info_wait_for_gitea: Waiting for Gitea setup completion.

@@ -54,6 +54,30 @@ pytest code/tutorial_app/tests/test_performance.py
 pytest --cov=code/tutorial_app
 ```
 
+## Using Local Gitea Server
+
+In this tutorial environment, a local Gitea instance is available for Git operations without external dependencies like GitHub.
+
+### Accessing Gitea
+- URL: http://localhost:3001
+- Default credentials: admin / admin
+- Database: SQLite at /data/gitea/gitea.db (inside the container)
+
+### Setup
+1. Start the environment: `docker-compose up -d`
+2. Visit http://localhost:3001 and complete initial setup if prompted.
+3. Create repositories as needed for tutorials.
+
+### Integration with Tutorials
+- In Basic 03 tutorial, use Gitea for publishing projects locally.
+- Select Gitea as the Git server when publishing.
+- Repository URL example: http://localhost:3001/admin/my-first-project-local.git
+- Username: admin, Password: admin
+
+### Troubleshooting
+- If Gitea is not accessible, check docker-compose logs: `docker-compose logs gitea`
+- Ensure port 3001 is not blocked.
+
 ## Adding New Tutorials
 
 ### 1. Create Page File
@@ -155,6 +179,69 @@ The application is deployed as part of NVIDIA AI Workbench. No additional deploy
 3. Run tests: `pytest`
 4. Run linting: `pylint code/tutorial_app/`
 5. Submit a pull request
+
+## Environment Validation
+
+Before running the tutorial or development environment, validate that all components are properly set up:
+
+### Docker Compose Validation
+```bash
+# Check if all services are running
+docker-compose ps
+
+# Verify container health
+docker-compose ps --services --filter "health=healthy"
+
+# Check logs for errors
+docker-compose logs | grep -i error
+```
+
+### Gitea Validation
+```bash
+# Access Gitea
+curl -u admin:admin http://localhost:3001/api/v1/version
+
+# Create test repository via API
+curl -X POST -u admin:admin \
+  -H "Content-Type: application/json" \
+  -d '{"name":"test-repo","description":"Test repository","private":false}' \
+  http://localhost:3001/api/v1/user/repos
+```
+
+### Application Health Checks
+```bash
+# Basic health check
+curl http://localhost/healthz
+
+# Redis connectivity
+docker-compose exec redis redis-cli ping
+
+# Backend API
+curl http://localhost:8000/api/health
+
+# Streamlit app
+curl -I http://localhost
+```
+
+### NVIDIA GPU Validation (if using GPU profile)
+```bash
+# Check GPU detection in container
+docker-compose --profile gpu exec tutorial-app nvidia-smi
+
+# Verify CUDA availability
+docker-compose --profile gpu exec tutorial-app python -c "import torch; print(torch.cuda.is_available())"
+```
+
+### Monitoring Validation
+```bash
+# Prometheus scrape check
+curl http://localhost:9090/api/v1/targets
+
+# Grafana health
+curl -u admin:admin http://localhost:3000/api/health
+```
+
+Run these checks after `docker-compose up -d` to ensure the environment is ready for development or tutorial execution. If any check fails, review the corresponding service logs with `docker-compose logs <service>`.
 
 ## Troubleshooting
 - **Import errors**: Ensure you're in the correct directory

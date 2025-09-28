@@ -49,6 +49,31 @@ The tutorial is organized into progressive sections:
 
 ## Get Started
 
+### Quick Setup (Recommended)
+
+Use our automated setup scripts for the best experience:
+
+**Windows:**
+```batch
+setup_all.bat
+```
+
+**Linux/macOS:**
+```bash
+./setup_all.sh
+```
+
+The setup script will:
+- Check prerequisites (Python, pip, Git, Docker)
+- Provide a menu of setup options
+- Install dependencies and configure environment
+- Validate the setup
+- Start the application
+
+### Manual Setup Options
+
+#### Option 1: Using NVIDIA AI Workbench (Recommended)
+
 1. Clone this project into the AI Workbench desktop app
 2. From the project view, click the green **Open Tutorial** button in the top right
 3. The browser will open the tutorial, follow along:
@@ -56,6 +81,65 @@ The tutorial is organized into progressive sections:
    - Complete each task in sequence
    - Verify your progress with built-in validation
    - Move to advanced topics when ready
+
+#### Option 2: Using Docker Compose (Standalone)
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd workbench-example-onboarding-project
+   ```
+
+2. Start the services:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. Access the application:
+   - Tutorial App: http://localhost
+   - Gitea (Local Git): http://localhost:3001 (admin/admin)
+   - Grafana (Monitoring): http://localhost:3000 (admin/admin)
+   - Prometheus: http://localhost:9090
+
+4. Follow the tutorial in your browser at http://localhost.
+
+5. Stop services when done:
+   ```bash
+   docker-compose down
+   ```
+
+#### Option 3: NVIDIA GPU Integration
+
+For GPU-accelerated workflows:
+
+1. Ensure NVIDIA Docker is installed and configured.
+2. Run setup script:
+   ```bash
+   ./setup_nvidia_integration.bat  # Windows
+   # or
+   ./setup_nvidia_integration.sh  # Linux/macOS
+   ```
+
+3. Start with GPU support:
+   ```bash
+   docker-compose --profile gpu up -d
+   ```
+
+4. Verify GPU access in the tutorial (Owlban Group NVIDIA section).
+   - Run `nvidia-smi` in the container to confirm GPU detection.
+   - Follow NVIDIA-specific exercises for accelerated computing.
+
+### Using Local Gitea for Git Operations
+
+In the Docker environment, use the local Gitea server for Git without external services:
+
+1. Access Gitea at http://localhost:3001 (admin/admin).
+2. Create a repository (e.g., "my-first-project-local").
+3. In the tutorial (Basic 03), select Gitea as Git server when publishing.
+4. Use URL: http://localhost:3001/admin/my-first-project-local.git
+5. Username: admin, Password: admin.
+
+This enables offline version control integrated with the tutorial.
 
 ## Development
 This tutorial app uses a template-based system for content management:

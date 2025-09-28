@@ -106,6 +106,14 @@ def wait_for_proj():
         raise
 
 
+def wait_for_gitea():
+    """Wait for Gitea setup to complete."""
+    # Placeholder: In a real scenario, this could check for the Gitea repository creation
+    # via wb_svc_client or external API call to Gitea.
+    # For this tutorial, assume manual completion; raise if not ready.
+    raise TestFail("info_wait_for_gitea")
+
+
 if __name__ == "__main__":
     sys.stdout.write("---------------\n")
     # you can use this space for testing while you are
