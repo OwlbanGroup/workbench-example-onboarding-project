@@ -71,12 +71,6 @@ async def get_user(user_id: str):
     data = get_user_data(user_id)
     if data is None:
         raise HTTPException(status_code=404, detail="User not found")
-    # Deserialize JSON string back to dict for progress field
-    if "progress" in data:
-        try:
-            data["progress"] = json.loads(data["progress"])
-        except (json.JSONDecodeError, TypeError):
-            pass
     return {"user_id": user_id, "data": data}
 
 
