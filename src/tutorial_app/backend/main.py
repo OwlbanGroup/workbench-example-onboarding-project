@@ -1,5 +1,7 @@
 """FastAPI backend for the tutorial app."""
 
+import json
+import logging
 from typing import Dict, Any
 
 from fastapi import FastAPI, HTTPException
@@ -41,13 +43,26 @@ async def health_check():
     return {"status": "healthy", "service": "tutorial-app-backend"}
 
 
+logger = logging.getLogger("tutorial_app_backend")
+logging.basicConfig(level=logging.DEBUG)
+
+
 @app.post("/users/{user_id}")
 async def create_or_update_user(user_id: str, user_data: UserData):
     """Create or update user data."""
-    success = store_user_data(user_id, user_data.dict())
-    if not success:
-        raise HTTPException(status_code=500, detail="Failed to store user data")
-    return {"message": "User data stored successfully", "user_id": user_id}
+    try:
+        # Serialize nested data to JSON string before storing
+        user_data_dict = user_data.dict()
+        if "progress" in user_data_dict:
+            user_data_dict["progress"] = json.dumps(user_data_dict["progress"])
+        success = store_user_data(user_id, user_data_dict)
+        if not success:
+            logger.error("Failed to store user data for user_id=%s", user_id)
+            raise HTTPException(status_code=500, detail="Failed to store user data")
+        return {"message": "User data stored successfully", "user_id": user_id}
+    except Exception as e:
+        logger.exception("Exception while storing user data for user_id=%s: %s", user_id, e)
+        raise HTTPException(status_code=500, detail=f"Exception: {str(e)}")
 
 
 @app.get("/users/{user_id}")
@@ -56,6 +71,12 @@ async def get_user(user_id: str):
     data = get_user_data(user_id)
     if data is None:
         raise HTTPException(status_code=404, detail="User not found")
+    # Deserialize JSON string back to dict for progress field
+    if "progress" in data:
+        try:
+            data["progress"] = json.loads(data["progress"])
+        except (json.JSONDecodeError, TypeError):
+            pass
     return {"user_id": user_id, "data": data}
 
 

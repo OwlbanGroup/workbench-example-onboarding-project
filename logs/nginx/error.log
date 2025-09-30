@@ -4522,3 +4522,6 @@
 2025/09/30 21:26:24 [error] 22#22: *2 access forbidden by rule, client: 172.19.0.4, server: localhost, request: "GET /metrics HTTP/1.1", host: "nginx:80"
 2025/09/30 21:26:34 [error] 22#22: *2 access forbidden by rule, client: 172.19.0.4, server: localhost, request: "GET /metrics HTTP/1.1", host: "nginx:80"
 2025/09/30 21:26:44 [error] 22#22: *2 access forbidden by rule, client: 172.19.0.4, server: localhost, request: "GET /metrics HTTP/1.1", host: "nginx:80"
+2025/09/30 21:26:54 [error] 22#22: *2 access forbidden by rule, client: 172.19.0.4, server: localhost, request: "GET /metrics HTTP/1.1", host: "nginx:80"
+2025/09/30 21:27:04 [error] 22#22: *2 access forbidden by rule, client: 172.19.0.4, server: localhost, request: "GET /metrics HTTP/1.1", host: "nginx:80"
+2025/09/30 21:27:14 [error] 22#22: *2 access forbidden by rule, client: 172.19.0.4, server: localhost, request: "GET /metrics HTTP/1.1", host: "nginx:80"
