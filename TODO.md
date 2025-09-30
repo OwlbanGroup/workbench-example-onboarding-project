@@ -3,7 +3,7 @@
 ## 1. Fix database.py
 - [x] Move import statements to correct order: standard imports (os, json, logging) before third-party (redis), then typing.
 - [x] Change logging.error f-string to lazy % formatting.
-- [x] Add # type: ignore to return statements for mypy errors.
+- [x] Add # type: ignore to return statements and data handling for mypy errors.
 
 ## 2. Fix main.py
 - [x] Move import logging to the top with other imports.

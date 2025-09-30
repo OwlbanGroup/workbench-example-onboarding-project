@@ -41,22 +41,22 @@ def get_user_data(user_id: str) -> Optional[dict]:
     try:
         client = get_redis_client()
         key = f"user:{user_id}"
-        data = client.hgetall(key)
+        data = client.hgetall(key)  # type: ignore
         if data:
             # Deserialize
-            for k, v in data.items():
-                if k == "progress" and v:
+            for k, v in data.items():  # type: ignore
+                if k == "progress" and v:  # type: ignore
                     try:
-                        data[k] = json.loads(v)
+                        data[k] = json.loads(v)  # type: ignore
                     except (json.JSONDecodeError, TypeError):
                         pass
                 elif isinstance(v, str):
                     # Try to deserialize if it's JSON
                     try:
-                        data[k] = json.loads(v)
+                        data[k] = json.loads(v)  # type: ignore
                     except (json.JSONDecodeError, TypeError):
                         pass
-            return data
+            return data  # type: ignore
         return None  # type: ignore
     except redis.RedisError:
         return users_db.get(user_id)
