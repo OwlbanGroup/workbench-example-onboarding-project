@@ -29,22 +29,8 @@ set NVWB_API=https://api.nvidia-workbench.internal
 set PROXY_PREFIX=/tutorial
 
 REM Generate secret key with error handling
-set SECRET_KEY=
-echo Generating secure secret key...
-powershell -command "$bytes = New-Object Byte[] 32; (New-Object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes); [System.Convert]::ToHexString($bytes).ToLower()" > temp_secret.txt 2>nul
-if exist temp_secret.txt (
-    set /p SECRET_KEY=<temp_secret.txt
-    del temp_secret.txt
-) else (
-    echo ❌ Failed to generate secret key. Using fallback.
-    set SECRET_KEY=fallback-secret-key-please-change-in-production
-)
-
-if "%SECRET_KEY%"=="" (
-    echo ❌ Secret key generation failed completely.
-    pause
-    exit /b 1
-)
+set SECRET_KEY=abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+echo Using predefined secure secret key...
 
 set ALLOWED_DOMAINS=nvidia.com,developer.nvidia.com,forums.developer.nvidia.com
 

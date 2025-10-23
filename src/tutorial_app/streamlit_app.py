@@ -42,8 +42,5 @@ def main():
     pg.run()
 
 
-# Apply middleware
-main = setup_middleware(main)
-
 if __name__ == "__main__":
     main()

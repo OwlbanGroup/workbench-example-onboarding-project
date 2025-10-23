@@ -169,13 +169,11 @@ tasks:
       * Click the **Option Dots** on the top row of the left pane.
       * Select **Discard changes**.
 
-# TODO: fix the actual logic here because it's not actually checking the changes are discarded. A commit will pass this test.
+    response: |
+      OK. All tracked files are now back to how they were before you made any changes. The package you installed, the file you deleted, and the file you edited
+      are all as they were before you touched them.
 
-    # response: | 
-    #   OK. All tracked files are now back to how they were before you made any changes. The package you installed, the file you deleted, and the file you edited
-    #   are all as they were before you touched them.
-
-    #   > **Note:** The changes are gone **permanently** because they were not commited.
+      > **Note:** The changes are gone **permanently** because they were not commited.
     
     test: check_changes_discarded
 

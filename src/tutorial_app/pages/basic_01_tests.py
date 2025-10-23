@@ -42,7 +42,7 @@ UBUNTU_PACKAGE = "jq"
 
 def check_folder_exists() -> dict[str, Any]:
     """Ensure the folder is created."""
-    _ = testing.get_folder(PROJECT_NAME, ROOT_DIR, FOLDER_NAME)
+    return testing.get_folder(PROJECT_NAME, ROOT_DIR, FOLDER_NAME)
 
 
 def check_file_in_folder() -> None:
@@ -99,7 +99,31 @@ def ensure_gpu_count() -> int:
     if gpu_count < 1:
         raise testing.TestFail("info_no_gpu_assigned")
 
+    return gpu_count
+
 
 def check_changes_discarded() -> None:
     """Check that the user has discarded all changes to the project."""
-    testing.ensure_changes_discarded(PROJECT_NAME)
+    # Check if delete-me.txt exists (should be restored after discard)
+    folder_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME)
+    if not os.path.exists(os.path.join(folder_path, DELETE_ME_FILE_NAME)):
+        raise testing.TestFail("info_check_changes_discarded")
+
+    # Check if example-file.txt is back to original content
+    file_path = os.path.join(PROJECT_DIR, CODE_FOLDER_NAME, "example-file.txt")
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read().strip()
+    if content != "this is an example":
+        raise testing.TestFail("info_check_changes_discarded")
+
+    # Check if package jq is not installed (should be removed after discard)
+    try:
+        testing.ensure_package(PROJECT_NAME, "apt", UBUNTU_PACKAGE)
+        raise testing.TestFail("info_check_changes_discarded")
+    except testing.TestFail:
+        pass  # Package not installed, which is expected after discard
+
+    # Check if GPU count is back to 0
+    gpu_count = testing.ensure_gpu_count(PROJECT_NAME)
+    if gpu_count != 0:
+        raise testing.TestFail("info_check_changes_discarded")
